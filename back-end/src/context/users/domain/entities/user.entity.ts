@@ -1,0 +1,93 @@
+import { Primitives } from '@codelytv/primitives-type';
+import BaseEntity from 'src/context/shared/domain/entities/baseEntity';
+import { hash, verify } from 'argon2';
+
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
+
+export class User extends BaseEntity {
+  constructor(
+    public readonly id: string,
+    public readonly username: string,
+    public readonly password: string,
+    public readonly role: UserRole,
+  ) {
+    super();
+  }
+
+  public toPrimitives(): Primitives<User> {
+    return {
+      id: this.id,
+      username: this.username,
+      password: this.password,
+      role: this.role,
+    };
+  }
+
+  public async login(password: string): Promise<boolean> {
+    return await verify(this.password, password);
+  }
+
+  public static fromPrimitives(primitives: Primitives<User>): User {
+    return new User(
+      primitives.id,
+      primitives.username,
+      primitives.password,
+      primitives.role,
+    );
+  }
+
+  public static async createUser(
+    id: string,
+    username: string,
+    password: string,
+  ): Promise<User> {
+    this.validateUsername(username);
+    this.validatePassword(password);
+    return new User(
+      id,
+      username,
+      await this.hashPassword(password),
+      UserRole.USER,
+    );
+  }
+
+  public static async createAdminUser(
+    id: string,
+    username: string,
+    password: string,
+  ): Promise<User> {
+    this.validateUsername(username);
+    this.validatePassword(password);
+    return new User(
+      id,
+      username,
+      await this.hashPassword(password),
+      UserRole.ADMIN,
+    );
+  }
+
+  private static async hashPassword(password: string): Promise<string> {
+    return hash(password);
+  }
+
+  private static validatePassword(password: string): void {
+    if (password.length < 8) {
+      throw new Error('Password must be at least 8 characters long');
+    }
+    if (password.length > 64) {
+      throw new Error('Password must be no more than 64 characters long');
+    }
+  }
+
+  private static validateUsername(name: string): void {
+    if (name.length < 3) {
+      throw new Error('Name must be at least 3 characters long');
+    }
+    if (name.length > 100) {
+      throw new Error('Name must be no more than 100 characters long');
+    }
+  }
+}
