@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
 import { MongoDBConnectionFactory } from './infrastructure/mongoDB/connection.factory';
 import { ConfigService } from '@nestjs/config';
+import { LOGGER } from './domain/logger';
+import PinoLogger from './infrastructure/pinoLogger';
 
 @Module({
   imports: [],
   providers: [
+    {
+      provide: LOGGER,
+      useClass: PinoLogger,
+    },
     MongoDBConnectionFactory,
     {
       provide: 'MONGO_CONNECTION',
@@ -18,6 +24,6 @@ import { ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     },
   ],
-  exports: ['MONGO_CONNECTION'],
+  exports: [LOGGER, 'MONGO_CONNECTION'],
 })
 export class SharedModule {}
