@@ -6,6 +6,8 @@ import { UsersModule } from 'src/context/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { databaseConfig } from './configs/database.config';
 import { adminConfig } from './configs/admin.config';
+import { APP_FILTER } from '@nestjs/core';
+import { ErrorHandler } from './error.handler';
 
 @Module({
   imports: [
@@ -17,6 +19,12 @@ import { adminConfig } from './configs/admin.config';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: ErrorHandler,
+    },
+  ],
 })
 export class AppModule {}
