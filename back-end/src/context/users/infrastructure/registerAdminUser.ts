@@ -4,7 +4,7 @@ import {
   UserRepository,
 } from '../domain/persistence/user.repository';
 import { ConfigService } from '@nestjs/config';
-import { User, UserRole } from '../domain/entities/user.entity';
+import { UserEntity, UserRole } from '../domain/entities/user.entity';
 import { randomUUID } from 'crypto';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class RegisterAdminUser implements OnModuleInit {
     if (adminCount > 0) {
       return;
     }
-    const admin = await User.createAdminUser(
+    const admin = await UserEntity.createAdminUser(
       randomUUID(),
       adminConfig.username,
       adminConfig.password,

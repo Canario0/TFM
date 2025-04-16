@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Collection, Filter, FindOptions, MongoClient } from 'mongodb';
 import { UserRepository } from '../../domain/persistence/user.repository';
-import { User } from '../../domain/entities/user.entity';
+import { UserEntity } from '../../domain/entities/user.entity';
 import { MongoRepository } from 'src/context/shared/infrastructure/mongoDB/mongo.repository';
 import { DocumentPrimitives } from 'src/context/shared/infrastructure/mongoDB/types/documentPrimitives';
 
 @Injectable()
 export class MongoUserRepository
-  extends MongoRepository<User>
+  extends MongoRepository<UserEntity>
   implements UserRepository
 {
   constructor(
@@ -21,31 +21,31 @@ export class MongoUserRepository
     return 'users';
   }
 
-  async findById(id: string): Promise<User | null> {
+  async findById(id: string): Promise<UserEntity | null> {
     const user = await this.collection().findOne({ _id: id });
     if (!user) {
       return null;
     }
-    return User.fromPrimitives({ ...user, id: user._id });
+    return UserEntity.fromPrimitives({ ...user, id: user._id });
   }
 
   async findAll(
-    filter: Filter<DocumentPrimitives<User>>,
+    filter: Filter<DocumentPrimitives<UserEntity>>,
     options?: FindOptions,
-  ): Promise<User[]> {
+  ): Promise<UserEntity[]> {
     const users = await this.collection().find(filter, options).toArray();
     return users.map((user) =>
-      User.fromPrimitives({
+      UserEntity.fromPrimitives({
         ...user,
         id: user._id,
       }),
     );
   }
-  async count(filter: Filter<DocumentPrimitives<User>>): Promise<number> {
+  async count(filter: Filter<DocumentPrimitives<UserEntity>>): Promise<number> {
     return this.collection().countDocuments(filter);
   }
 
-  async create(user: User): Promise<User> {
+  async create(user: UserEntity): Promise<UserEntity> {
     const { id, ...userPrimitivesWithoutId } = user.toPrimitives();
     await this.collection().insertOne({
       ...userPrimitivesWithoutId,
@@ -54,7 +54,7 @@ export class MongoUserRepository
     return user;
   }
 
-  async update(user: User): Promise<User> {
+  async update(user: UserEntity): Promise<UserEntity> {
     const { id, ...userPrimitives } = user.toPrimitives();
     await this.collection().updateOne(
       { _id: id },

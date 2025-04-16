@@ -7,7 +7,7 @@ export enum UserRole {
   USER = 'USER',
 }
 
-export class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
   constructor(
     public readonly id: string,
     public readonly username: string,
@@ -17,7 +17,7 @@ export class User extends BaseEntity {
     super();
   }
 
-  public toPrimitives(): Primitives<User> {
+  public toPrimitives(): Primitives<UserEntity> {
     return {
       id: this.id,
       username: this.username,
@@ -30,8 +30,8 @@ export class User extends BaseEntity {
     return await verify(this.password, password);
   }
 
-  public static fromPrimitives(primitives: Primitives<User>): User {
-    return new User(
+  public static fromPrimitives(primitives: Primitives<UserEntity>): UserEntity {
+    return new UserEntity(
       primitives.id,
       primitives.username,
       primitives.password,
@@ -43,10 +43,10 @@ export class User extends BaseEntity {
     id: string,
     username: string,
     password: string,
-  ): Promise<User> {
+  ): Promise<UserEntity> {
     this.validateUsername(username);
     this.validatePassword(password);
-    return new User(
+    return new UserEntity(
       id,
       username,
       await this.hashPassword(password),
@@ -58,10 +58,10 @@ export class User extends BaseEntity {
     id: string,
     username: string,
     password: string,
-  ): Promise<User> {
+  ): Promise<UserEntity> {
     this.validateUsername(username);
     this.validatePassword(password);
-    return new User(
+    return new UserEntity(
       id,
       username,
       await this.hashPassword(password),
