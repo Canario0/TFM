@@ -1,6 +1,7 @@
 import { Primitives } from '@codelytv/primitives-type';
 import BaseEntity from 'src/context/shared/domain/entities/baseEntity';
 import { hash, verify } from 'argon2';
+import InvalidArgumentError from 'src/context/shared/domain/errors/invalidArgumentError';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -75,19 +76,27 @@ export class UserEntity extends BaseEntity {
 
   private static validatePassword(password: string): void {
     if (password.length < 8) {
-      throw new Error('Password must be at least 8 characters long');
+      throw new InvalidArgumentError(
+        'Password must be at least 8 characters long',
+      );
     }
     if (password.length > 64) {
-      throw new Error('Password must be no more than 64 characters long');
+      throw new InvalidArgumentError(
+        'Password must be no more than 64 characters long',
+      );
     }
   }
 
-  private static validateUsername(name: string): void {
-    if (name.length < 3) {
-      throw new Error('Name must be at least 3 characters long');
+  private static validateUsername(username: string): void {
+    if (username.length < 3) {
+      throw new InvalidArgumentError(
+        'Username must be at least 3 characters long',
+      );
     }
-    if (name.length > 100) {
-      throw new Error('Name must be no more than 100 characters long');
+    if (username.length > 100) {
+      throw new InvalidArgumentError(
+        'Username must be no more than 100 characters long',
+      );
     }
   }
 }

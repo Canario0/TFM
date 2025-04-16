@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { SharedModule } from 'src/context/shared/shared.module';
-import { AppController } from './controllers/app.controller';
+import { UsersController } from './controllers/users.controller';
 import { UsersModule } from 'src/context/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { databaseConfig } from './configs/database.config';
@@ -18,9 +17,8 @@ import { ErrorHandler } from './error.handler';
     SharedModule,
     UsersModule,
   ],
-  controllers: [AppController],
+  controllers: [UsersController],
   providers: [
-    AppService,
     {
       provide: APP_FILTER,
       useClass: ErrorHandler,

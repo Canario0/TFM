@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { SharedModule } from '../shared/shared.module';
 import { USER_REPOSITORY } from './domain/persistence/user.repository';
 import { MongoUserRepository } from './infrastructure/mongoDB/mongoUser.repository';
-import { RegisterAdminUser } from './infrastructure/registerAdminUser';
+import { RegisterAdminUser } from './application/register/registerAdminUser';
+import RegisterUser from './application/register/registerUser';
 
 @Module({
   imports: [SharedModule],
@@ -12,7 +13,8 @@ import { RegisterAdminUser } from './infrastructure/registerAdminUser';
       useClass: MongoUserRepository,
     },
     RegisterAdminUser,
+    RegisterUser,
   ],
-  exports: [],
+  exports: [RegisterUser],
 })
 export class UsersModule {}

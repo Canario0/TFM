@@ -2,9 +2,9 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import {
   USER_REPOSITORY,
   UserRepository,
-} from '../domain/persistence/user.repository';
+} from '../../domain/persistence/user.repository';
 import { ConfigService } from '@nestjs/config';
-import { UserEntity, UserRole } from '../domain/entities/user.entity';
+import { UserEntity, UserRole } from '../../domain/entities/user.entity';
 import { randomUUID } from 'crypto';
 
 @Injectable()
