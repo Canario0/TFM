@@ -2,6 +2,8 @@ import { Primitives } from '@codelytv/primitives-type';
 import BaseEntity from 'src/context/shared/domain/entities/baseEntity';
 import { hash, verify } from 'argon2';
 import InvalidArgumentError from 'src/context/shared/domain/errors/invalidArgumentError';
+import UnauthorizedError from 'src/context/shared/domain/errors/unauthorizedError';
+import { sign } from 'jsonwebtoken';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -27,8 +29,19 @@ export class UserEntity extends BaseEntity {
     };
   }
 
-  public async login(password: string): Promise<boolean> {
-    return await verify(this.password, password);
+  public async login(password: string): Promise<string> {
+    if (!(await verify(this.password, password))) {
+      throw new UnauthorizedError('Invalid username or password');
+    }
+    return sign(
+      { roles: [this.role], username: this.username },
+      process.env.JWT_SECRET!,
+      {
+        subject: this.id,
+        expiresIn: '12h',
+        issuer: 'api.comparathor.com',
+      },
+    );
   }
 
   public static fromPrimitives(primitives: Primitives<UserEntity>): UserEntity {
