@@ -5,19 +5,19 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1',
-  });
-  app.useLogger(app.get(LOGGER));
+    const app = await NestFactory.create(AppModule);
+    app.enableVersioning({
+        type: VersioningType.URI,
+        defaultVersion: '1',
+    });
+    app.useLogger(app.get(LOGGER));
 
-  const config = new DocumentBuilder()
-    .setTitle('Comparathor API DOCS')
-    .setVersion('1.0')
-    .build();
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, documentFactory);
-  await app.listen(process.env.PORT ?? 3000);
+    const config = new DocumentBuilder()
+        .setTitle('Comparathor API DOCS')
+        .setVersion('1.0')
+        .build();
+    const documentFactory = () => SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, documentFactory);
+    await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

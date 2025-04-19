@@ -7,16 +7,16 @@ import RegisterUser from './application/registerUser/registerUser';
 import Login from './application/login/login';
 
 @Module({
-  imports: [SharedModule],
-  providers: [
-    {
-      provide: USER_REPOSITORY,
-      useClass: MongoUserRepository,
-    },
-    RegisterAdminUser,
-    RegisterUser,
-    Login,
-  ],
-  exports: [RegisterUser, Login],
+    imports: [SharedModule],
+    providers: [
+        {
+            provide: USER_REPOSITORY,
+            useClass: MongoUserRepository,
+        },
+        RegisterAdminUser,
+        RegisterUser,
+        Login,
+    ],
+    exports: [RegisterUser, Login],
 })
 export class UsersModule {}

@@ -5,13 +5,13 @@ import { DocumentPrimitives } from 'src/context/shared/infrastructure/mongoDB/ty
 export const CATEGORY_REPOSITORY = Symbol('CategoryRepository');
 
 export interface CategoryRepository {
-//   findById(id: string): Promise<CategoryEntity | null>;
-//   findAll(
-//     filter: Filter<DocumentPrimitives<CategoryEntity>>,
-//     options?: FindOptions,
-//   ): Promise<CategoryEntity[]>;
-//   count(filter: Filter<DocumentPrimitives<CategoryEntity>>): Promise<number>;
-  create(category: CategoryEntity): Promise<CategoryEntity>;
-//   update(category: CategoryEntity): Promise<CategoryEntity>;
-//   delete(id: string): Promise<void>;
+    findById(id: string): Promise<CategoryEntity | null>;
+    findAll(
+        filter: Filter<DocumentPrimitives<CategoryEntity>>,
+        options?: FindOptions,
+    ): Promise<CategoryEntity[]>;
+    //   count(filter: Filter<DocumentPrimitives<CategoryEntity>>): Promise<number>;
+    create(category: CategoryEntity): Promise<CategoryEntity>;
+    //   update(category: CategoryEntity): Promise<CategoryEntity>;
+    //   delete(id: string): Promise<void>;
 }

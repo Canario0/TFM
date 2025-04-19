@@ -7,22 +7,25 @@ import { databaseConfig } from './configs/database.config';
 import { adminConfig } from './configs/admin.config';
 import { APP_FILTER } from '@nestjs/core';
 import { ErrorHandler } from './error.handler';
+import { CategoriesModule } from 'src/context/categories/categories.module';
+import { CategoriesController } from './controllers/categories.controller';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [databaseConfig, adminConfig],
-    }),
-    SharedModule,
-    UsersModule,
-  ],
-  controllers: [UsersController],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: ErrorHandler,
-    },
-  ],
+    imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+            load: [databaseConfig, adminConfig],
+        }),
+        SharedModule,
+        UsersModule,
+        CategoriesModule,
+    ],
+    controllers: [UsersController, CategoriesController],
+    providers: [
+        {
+            provide: APP_FILTER,
+            useClass: ErrorHandler,
+        },
+    ],
 })
 export class AppModule {}

@@ -1,3 +1,3 @@
 export default interface MongoConfig {
-  uri: string;
+    uri: string;
 }

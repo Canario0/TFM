@@ -1,7 +1,7 @@
 import BaseError from './base';
 
 export default class ForbiddenError extends BaseError {
-  constructor(message?: string) {
-    super(message, 'FORBIDDEN');
-  }
+    constructor(message?: string) {
+        super(message, 'FORBIDDEN');
+    }
 }

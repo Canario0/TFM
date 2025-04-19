@@ -1,7 +1,7 @@
 import BaseError from './base';
 
 export default class UnauthorizedError extends BaseError {
-  constructor(message?: string) {
-    super(message, 'UNAUTHORIZED');
-  }
+    constructor(message?: string) {
+        super(message, 'UNAUTHORIZED');
+    }
 }

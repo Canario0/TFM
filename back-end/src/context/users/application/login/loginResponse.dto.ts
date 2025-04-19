@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginResponseDto {
-  @ApiProperty()
-  idToken: string;
+    @ApiProperty()
+    idToken: string;
 
-  constructor(idToken: string) {
-    this.idToken = idToken;
-  }
+    constructor(idToken: string) {
+        this.idToken = idToken;
+    }
 }
