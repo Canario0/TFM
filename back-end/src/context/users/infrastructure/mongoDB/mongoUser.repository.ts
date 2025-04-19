@@ -21,12 +21,16 @@ export class MongoUserRepository
     return 'users';
   }
 
+  hydrate(document: DocumentPrimitives<UserEntity>): UserEntity {
+    return UserEntity.fromPrimitives({ ...document, id: document._id });
+  }
+
   async findById(id: string): Promise<UserEntity | null> {
     const user = await this.collection().findOne({ _id: id });
     if (!user) {
       return null;
     }
-    return UserEntity.fromPrimitives({ ...user, id: user._id });
+    return this.hydrate(user);
   }
 
   async findAll(
@@ -34,13 +38,9 @@ export class MongoUserRepository
     options?: FindOptions,
   ): Promise<UserEntity[]> {
     const users = await this.collection().find(filter, options).toArray();
-    return users.map((user) =>
-      UserEntity.fromPrimitives({
-        ...user,
-        id: user._id,
-      }),
-    );
+    return users.map((user) => this.hydrate(user));
   }
+
   async count(filter: Filter<DocumentPrimitives<UserEntity>>): Promise<number> {
     return this.collection().countDocuments(filter);
   }

@@ -7,6 +7,8 @@ export abstract class MongoRepository<T extends BaseEntity> {
 
   protected abstract collectionName(): string;
 
+  protected abstract hydrate(document: DocumentPrimitives<T>): T;
+
   protected collection(): Collection<DocumentPrimitives<T>> {
     return this.client
       .db()
