@@ -4,6 +4,8 @@ import { CategoryDto } from 'src/context/categories/application/category.dto';
 import { CategoryPreviewDto } from 'src/context/categories/application/findAll/categoryPreview.dto';
 import { FindAllCategories } from 'src/context/categories/application/findAll/findaAllCategories';
 import { FindCategoryById } from 'src/context/categories/application/findById/findaCategoryById';
+import { UserRole } from 'src/context/users/domain/entities/user.entity';
+import { Auth } from '../decorators/auth.decorator';
 
 @Controller('categories')
 @ApiTags('Categories')
@@ -25,6 +27,7 @@ export class CategoriesController {
     }
 
     @Get('/:id')
+    @Auth(UserRole.ADMIN, UserRole.USER)
     @ApiOperation({ summary: 'Get a category by id' })
     @ApiResponse({
         status: 200,
