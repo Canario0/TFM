@@ -1,17 +1,12 @@
 import { Collection, MongoClient } from 'mongodb';
 import BaseEntity from '../../domain/entities/baseEntity';
-import { DocumentPrimitives } from './types/documentPrimitives';
 
 export abstract class MongoRepository<T extends BaseEntity> {
-    constructor(private readonly client: MongoClient) {}
+    constructor(protected readonly client: MongoClient) {}
 
     protected abstract collectionName(): string;
 
-    protected abstract hydrate(document: DocumentPrimitives<T>): T;
+    protected abstract hydrate(document: unknown): T;
 
-    protected collection(): Collection<DocumentPrimitives<T>> {
-        return this.client
-            .db()
-            .collection<DocumentPrimitives<T>>(this.collectionName());
-    }
+    protected abstract collection(): Collection<any>;
 }

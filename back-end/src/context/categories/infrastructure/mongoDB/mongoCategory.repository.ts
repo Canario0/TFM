@@ -1,9 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Filter, FindOptions, MongoClient, MongoError } from 'mongodb';
+import {
+    Collection,
+    Filter,
+    FindOptions,
+    MongoClient,
+    MongoError,
+} from 'mongodb';
 import { MongoRepository } from 'src/context/shared/infrastructure/mongoDB/mongo.repository';
 import { DocumentPrimitives } from 'src/context/shared/infrastructure/mongoDB/types/documentPrimitives';
 import { CategoryEntity } from '../../domain/entities/category.entity';
-import { CategoryRepository } from '../../domain/persistence/category.respository';
+import { CategoryRepository } from '../../domain/persistence/category.repository';
 import AlreadyExistsError from 'src/context/shared/domain/errors/alreadyExistsError';
 
 @Injectable()
@@ -18,12 +24,22 @@ export class MongoCategoryRepository
         super(client);
     }
 
-    collectionName(): string {
+    protected collectionName(): string {
         return 'categories';
     }
 
-    hydrate(document: DocumentPrimitives<CategoryEntity>): CategoryEntity {
+    protected hydrate(
+        document: DocumentPrimitives<CategoryEntity>,
+    ): CategoryEntity {
         return CategoryEntity.fromPrimitives({ ...document, id: document._id });
+    }
+
+    protected collection(): Collection<DocumentPrimitives<CategoryEntity>> {
+        return this.client
+            .db()
+            .collection<
+                DocumentPrimitives<CategoryEntity>
+            >(this.collectionName());
     }
 
     async findById(id: string): Promise<CategoryEntity | null> {

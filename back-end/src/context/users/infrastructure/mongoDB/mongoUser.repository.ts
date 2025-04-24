@@ -17,12 +17,18 @@ export class MongoUserRepository
         super(client);
     }
 
-    collectionName(): string {
+    protected collectionName(): string {
         return 'users';
     }
 
-    hydrate(document: DocumentPrimitives<UserEntity>): UserEntity {
+    protected hydrate(document: DocumentPrimitives<UserEntity>): UserEntity {
         return UserEntity.fromPrimitives({ ...document, id: document._id });
+    }
+
+    protected collection(): Collection<DocumentPrimitives<UserEntity>> {
+        return this.client
+            .db()
+            .collection<DocumentPrimitives<UserEntity>>(this.collectionName());
     }
 
     async findById(id: string): Promise<UserEntity | null> {
