@@ -4,6 +4,7 @@ import { hash, verify } from 'argon2';
 import InvalidArgumentError from 'src/context/shared/domain/errors/invalidArgumentError';
 import UnauthorizedError from 'src/context/shared/domain/errors/unauthorizedError';
 import { sign } from 'jsonwebtoken';
+import { randomUUID } from 'crypto';
 
 export enum UserRole {
     ADMIN = 'ADMIN',
@@ -37,6 +38,7 @@ export class UserEntity extends BaseEntity {
             { roles: [this.role], username: this.username },
             process.env.JWT_SECRET!,
             {
+                jwtid: randomUUID(),
                 subject: this.id,
                 expiresIn: '12h',
                 issuer: 'api.comparathor.com',

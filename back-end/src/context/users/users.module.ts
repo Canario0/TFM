@@ -5,6 +5,10 @@ import { MongoUserRepository } from './infrastructure/mongoDB/mongoUser.reposito
 import { RegisterAdminUser } from './application/registerAdmin/registerAdminUser';
 import RegisterUser from './application/registerUser/registerUser';
 import Login from './application/login/login';
+import { BLACKLIST_REPOSITORY } from './domain/persistence/blacklist.repository';
+import { MongoBlacklistRepository } from './infrastructure/mongoDB/mongoBlacklist.repository';
+import Logout from './application/logout/logout';
+import CheckBlacklist from './application/checkBlacklist/checkBlacklist';
 
 @Module({
     imports: [SharedModule],
@@ -13,10 +17,16 @@ import Login from './application/login/login';
             provide: USER_REPOSITORY,
             useClass: MongoUserRepository,
         },
+        {
+            provide: BLACKLIST_REPOSITORY,
+            useClass: MongoBlacklistRepository,
+        },
         RegisterAdminUser,
         RegisterUser,
         Login,
+        Logout,
+        CheckBlacklist,
     ],
-    exports: [RegisterUser, Login],
+    exports: [RegisterUser, Login, Logout, CheckBlacklist],
 })
 export class UsersModule {}

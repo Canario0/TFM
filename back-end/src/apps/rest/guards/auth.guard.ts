@@ -6,26 +6,24 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { verify } from 'jsonwebtoken';
-import { Observable } from 'rxjs';
 import UnauthorizedError from 'src/context/shared/domain/errors/unauthorizedError';
 import { Logger, LOGGER } from 'src/context/shared/domain/logger';
 import { UserRole } from 'src/context/users/domain/entities/user.entity';
 import { ROLE_METADATA_KEY } from '../decorators/auth.decorator';
 import ForbiddenError from 'src/context/shared/domain/errors/forbiddenError';
 import InternalError from 'src/context/shared/domain/errors/internalError';
-
-const AUTH_HEADER = 'authorization';
+import { extractTokenFromHeader } from '../utils';
+import CheckBlacklist from 'src/context/users/application/checkBlacklist/checkBlacklist';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(
         @Inject(LOGGER) private readonly logger: Logger,
         private readonly reflector: Reflector,
+        private readonly checkBlacklist: CheckBlacklist,
     ) {}
 
-    canActivate(
-        context: ExecutionContext,
-    ): boolean | Promise<boolean> | Observable<boolean> {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const roles = this.reflector.get<UserRole[]>(
             ROLE_METADATA_KEY,
             context.getHandler(),
@@ -42,6 +40,10 @@ export class AuthGuard implements CanActivate {
             const decoded = verify(token, process.env.JWT_SECRET!, {
                 issuer: 'api.comparathor.com',
             });
+            const isBlacklisted = await this.checkBlacklist.run(decoded['jti']);
+            if (isBlacklisted) {
+                throw new UnauthorizedError();
+            }
             const tokenRoles = decoded['roles'] ?? [];
             const hasValidRole = roles.some((role) =>
                 tokenRoles.includes(role),
@@ -59,28 +61,6 @@ export class AuthGuard implements CanActivate {
     }
 
     private extractTokenFromHeader(request: Request): string | null {
-        let token: string | null = null;
-        if (request.headers[AUTH_HEADER]) {
-            const auth_params = this.parseAuthHeader(
-                request.headers[AUTH_HEADER],
-            );
-            if (auth_params && 'bearer' === auth_params.scheme.toLowerCase()) {
-                token = auth_params.value;
-            }
-        }
-        return token;
-    }
-
-    private parseAuthHeader(
-        header: string,
-    ): { scheme: string; value: string } | null {
-        if (typeof header !== 'string') {
-            return null;
-        }
-        const parts = header.split(' ');
-        if (parts.length !== 2 || parts[0] !== 'Bearer') {
-            return null;
-        }
-        return { scheme: parts[0], value: parts[1] };
+        return extractTokenFromHeader(request);
     }
 }
