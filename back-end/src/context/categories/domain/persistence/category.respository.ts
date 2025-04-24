@@ -12,6 +12,4 @@ export interface CategoryRepository {
     ): Promise<CategoryEntity[]>;
     //   count(filter: Filter<DocumentPrimitives<CategoryEntity>>): Promise<number>;
     create(category: CategoryEntity): Promise<CategoryEntity>;
-    //   update(category: CategoryEntity): Promise<CategoryEntity>;
-    //   delete(id: string): Promise<void>;
 }

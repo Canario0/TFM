@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Collection, Filter, FindOptions, MongoClient } from 'mongodb';
+import { Filter, FindOptions, MongoClient, MongoError } from 'mongodb';
 import { MongoRepository } from 'src/context/shared/infrastructure/mongoDB/mongo.repository';
 import { DocumentPrimitives } from 'src/context/shared/infrastructure/mongoDB/types/documentPrimitives';
 import { CategoryEntity } from '../../domain/entities/category.entity';
 import { CategoryRepository } from '../../domain/persistence/category.respository';
+import AlreadyExistsError from 'src/context/shared/domain/errors/alreadyExistsError';
 
 @Injectable()
 export class MongoCategoryRepository
@@ -44,10 +45,19 @@ export class MongoCategoryRepository
 
     async create(category: CategoryEntity): Promise<CategoryEntity> {
         const { id, ...categoryPrimitivesWithoutId } = category.toPrimitives();
-        await this.collection().insertOne({
-            ...categoryPrimitivesWithoutId,
-            _id: id,
-        } as DocumentPrimitives<CategoryEntity>);
-        return category;
+        try {
+            await this.collection().insertOne({
+                ...categoryPrimitivesWithoutId,
+                _id: id,
+            } as DocumentPrimitives<CategoryEntity>);
+            return category;
+        } catch (error) {
+            if (error instanceof MongoError && error.code === 11000) {
+                throw new AlreadyExistsError(
+                    'La categoría con este nombre ya existe',
+                );
+            }
+            throw error;
+        }
     }
 }

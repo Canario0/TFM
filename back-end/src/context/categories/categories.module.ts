@@ -4,6 +4,7 @@ import { MongoCategoryRepository } from './infrastructure/mongoDB/mongoCategory.
 import { CATEGORY_REPOSITORY } from './domain/persistence/category.respository';
 import { FindAllCategories } from './application/findAll/findaAllCategories';
 import { FindCategoryById } from './application/findById/findaCategoryById';
+import { CreateCategory } from './application/create/create';
 
 @Module({
     imports: [SharedModule],
@@ -14,7 +15,8 @@ import { FindCategoryById } from './application/findById/findaCategoryById';
         },
         FindAllCategories,
         FindCategoryById,
+        CreateCategory,
     ],
-    exports: [FindAllCategories, FindCategoryById],
+    exports: [FindAllCategories, FindCategoryById, CreateCategory],
 })
 export class CategoriesModule {}
