@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
     CATEGORY_REPOSITORY,
     CategoryRepository,
-} from '../../domain/persistence/category.respository';
+} from '../../domain/persistence/category.repository';
 import { CategoryPreviewDto } from './categoryPreview.dto';
 
 @Injectable()

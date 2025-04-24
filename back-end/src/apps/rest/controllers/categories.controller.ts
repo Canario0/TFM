@@ -9,8 +9,8 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryDto } from 'src/context/categories/application/category.dto';
 import { CategoryPreviewDto } from 'src/context/categories/application/findAll/categoryPreview.dto';
-import { FindAllCategories } from 'src/context/categories/application/findAll/findaAllCategories';
-import { FindCategoryById } from 'src/context/categories/application/findById/findaCategoryById';
+import { FindAllCategories } from 'src/context/categories/application/findAll/findAllCategories';
+import { FindCategoryById } from 'src/context/categories/application/findById/findCategoryById';
 import { UserRole } from 'src/context/users/domain/entities/user.entity';
 import { Auth } from '../decorators/auth.decorator';
 import { CreateCategoryDto } from 'src/context/categories/application/create/createCategory.dto';

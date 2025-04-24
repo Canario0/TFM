@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
     CATEGORY_REPOSITORY,
     CategoryRepository,
-} from '../../domain/persistence/category.respository';
+} from '../../domain/persistence/category.repository';
 import { CategoryDto } from '../category.dto';
 import NotFoundError from 'src/context/shared/domain/errors/notFoundError';
 import { CreateCategoryDto } from './createCategory.dto';
