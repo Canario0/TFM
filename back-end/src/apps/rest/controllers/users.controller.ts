@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import Login from 'src/context/users/application/login/login';
 import { LoginDto } from 'src/context/users/application/login/login.dto';
@@ -38,21 +38,23 @@ export class UsersController {
     }
 
     @Post('/login')
+    @HttpCode(200)
     @ApiOperation({ summary: 'Login a user' })
-    @ApiResponse({
-        status: 401,
-        description: 'The user has not been logged in.',
-    })
     @ApiResponse({
         status: 200,
         description: 'The user has been successfully logged in.',
         type: LoginResponseDto,
+    })
+    @ApiResponse({
+        status: 401,
+        description: 'The user has not been logged in.',
     })
     login(@Body() dto: LoginDto): Promise<LoginResponseDto> {
         return this.loginService.run(dto);
     }
 
     @Post('/logout')
+    @HttpCode(200)
     @ApiOperation({ summary: 'Logout a user' })
     @ApiResponse({
         status: 200,
