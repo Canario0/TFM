@@ -5,9 +5,6 @@ import { Icons } from 'src/context/shared/domain/types';
 import { SubCategory } from '../domain/entities/subCategory.entity';
 
 export class SubCategoryDto {
-    @ApiProperty({ format: 'uuid' })
-    id: string;
-
     @ApiProperty()
     @IsString()
     @Length(3, 100, {
