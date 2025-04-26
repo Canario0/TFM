@@ -5,11 +5,9 @@ import {
 } from '../../domain/persistence/category.repository';
 import { CategoryDto } from '../category.dto';
 import { CreateCategoryDto } from './createCategory.dto';
-import {
-    CategoryEntity,
-    SubCategory,
-} from '../../domain/entities/category.entity';
+import { CategoryEntity } from '../../domain/entities/category.entity';
 import { randomUUID } from 'crypto';
+import { SubCategory } from '../../domain/entities/subCategory.entity';
 
 @Injectable()
 export class CreateCategory {

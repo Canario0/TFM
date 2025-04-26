@@ -1,11 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-    CategoryEntity,
-    CategoryIcons,
-    SubCategory,
-    SubcategoryIcons,
-} from '../domain/entities/category.entity';
+import { CategoryEntity } from '../domain/entities/category.entity';
 import { IsEnum, IsString, Length } from 'class-validator';
+import { Icons } from 'src/context/shared/domain/types';
+import { SubCategory } from '../domain/entities/subCategory.entity';
 
 export class SubCategoryDto {
     @ApiProperty({ format: 'uuid' })
@@ -18,11 +15,11 @@ export class SubCategoryDto {
     })
     name: string;
 
-    @ApiProperty({ enum: SubcategoryIcons })
-    @IsEnum(SubcategoryIcons, {
+    @ApiProperty({ enum: Icons })
+    @IsEnum(Icons, {
         message: 'Icon must be a valid subcategory icon',
     })
-    icon: SubcategoryIcons;
+    icon: Icons;
 
     @ApiProperty()
     @IsString({ each: true })
@@ -50,11 +47,11 @@ export class CategoryDto {
     })
     name: string;
 
-    @ApiProperty({ enum: CategoryIcons })
-    @IsEnum(CategoryIcons, {
+    @ApiProperty({ enum: Icons })
+    @IsEnum(Icons, {
         message: 'Icon must be a valid category icon',
     })
-    icon: CategoryIcons;
+    icon: Icons;
 
     @ApiProperty({ type: [SubCategoryDto] })
     subCategories: SubCategoryDto[];
