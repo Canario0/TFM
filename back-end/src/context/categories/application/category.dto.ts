@@ -8,6 +8,9 @@ import {
 import { IsEnum, IsString, Length } from 'class-validator';
 
 export class SubCategoryDto {
+    @ApiProperty({ format: 'uuid' })
+    id: string;
+
     @ApiProperty()
     @IsString()
     @Length(3, 100, {

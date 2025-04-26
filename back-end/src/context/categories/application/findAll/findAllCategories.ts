@@ -14,6 +14,6 @@ export class FindAllCategories {
 
     async run(): Promise<CategoryPreviewDto[]> {
         const categories = await this.categoryRepository.findAll({});
-        return categories.map((category) => new CategoryPreviewDto(category));
+        return categories.map(CategoryPreviewDto.fromEntity);
     }
 }
