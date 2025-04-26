@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    HttpCode,
+    Param,
+    ParseUUIDPipe,
+    Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import Login from 'src/context/users/application/login/login';
 import { LoginDto } from 'src/context/users/application/login/login.dto';
@@ -8,6 +15,9 @@ import { RegisterUserDto } from 'src/context/users/application/registerUser/regi
 import { UserDto } from 'src/context/users/application/user.dto';
 import { TokenInfo } from '../decorators/tokenInfo.decorator';
 import Logout from 'src/context/users/application/logout/logout';
+import PromoteUser from 'src/context/users/application/promote/promote';
+import { UserRole } from 'src/context/users/domain/entities/user.entity';
+import { Auth } from '../decorators/auth.decorator';
 
 @Controller('users')
 @ApiTags('Users')
@@ -16,6 +26,7 @@ export class UsersController {
         private readonly registerUser: RegisterUser,
         private readonly loginService: Login,
         private readonly logoutService: Logout,
+        private readonly promoteUser: PromoteUser,
     ) {}
 
     @Post('/register')
@@ -35,6 +46,26 @@ export class UsersController {
     })
     register(@Body() dto: RegisterUserDto): Promise<UserDto> {
         return this.registerUser.run(dto);
+    }
+
+    @Post('/:id/promote')
+    @HttpCode(200)
+    @Auth(UserRole.ADMIN)
+    @ApiOperation({ summary: 'Promote a user' })
+    @ApiResponse({
+        status: 201,
+        description: 'The user has been successfully promoted.',
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'The user has not been promoted.',
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'The user does not exist.',
+    })
+    async promote(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+        await this.promoteUser.run(id);
     }
 
     @Post('/login')

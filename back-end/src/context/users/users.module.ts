@@ -9,6 +9,7 @@ import { BLACKLIST_REPOSITORY } from './domain/persistence/blacklist.repository'
 import { MongoBlacklistRepository } from './infrastructure/mongoDB/mongoBlacklist.repository';
 import Logout from './application/logout/logout';
 import CheckBlacklist from './application/checkBlacklist/checkBlacklist';
+import PromoteUser from './application/promote/promote';
 
 @Module({
     imports: [SharedModule],
@@ -26,7 +27,8 @@ import CheckBlacklist from './application/checkBlacklist/checkBlacklist';
         Login,
         Logout,
         CheckBlacklist,
+        PromoteUser,
     ],
-    exports: [RegisterUser, Login, Logout, CheckBlacklist],
+    exports: [RegisterUser, Login, Logout, CheckBlacklist, PromoteUser],
 })
 export class UsersModule {}

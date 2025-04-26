@@ -13,12 +13,23 @@ export enum UserRole {
 
 export class UserEntity extends BaseEntity {
     constructor(
-        public readonly id: string,
-        public readonly username: string,
-        public readonly password: string,
-        public readonly role: UserRole,
+        public id: string,
+        public username: string,
+        public password: string,
+        public role: UserRole,
     ) {
         super();
+    }
+
+    public isAdmin(): boolean {
+        return this.role === UserRole.ADMIN;
+    }
+
+    public promote(): void {
+        if (this.role === UserRole.ADMIN) {
+            return;
+        }
+        this.role = UserRole.ADMIN;
     }
 
     public toPrimitives(): Primitives<UserEntity> {
