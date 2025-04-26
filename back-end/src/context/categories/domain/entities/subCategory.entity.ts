@@ -39,12 +39,12 @@ export class SubCategory {
     private static validateName(name: string): void {
         if (name.length < 3) {
             throw new InvalidArgumentError(
-                'Name must be at least 3 characters long',
+                'El nombre de la subcategoría debe tener al menos 3 caracteres',
             );
         }
         if (name.length > 100) {
             throw new InvalidArgumentError(
-                'Name must be no more than 100 characters long',
+                'El nombre de la subcategoría no debe tener más de 100 caracteres',
             );
         }
     }
@@ -52,7 +52,9 @@ export class SubCategory {
     private static validateNonDuplicatedMetadata(metadata: string[]): void {
         const uniqueMetadata = new Set(metadata);
         if (uniqueMetadata.size !== metadata.length) {
-            throw new InvalidArgumentError('Metadata must be unique');
+            throw new InvalidArgumentError(
+                'Los metadatos de la subcategoría deben ser únicos',
+            );
         }
     }
 }

@@ -105,12 +105,12 @@ export class UserEntity extends BaseEntity {
     private static validatePassword(password: string): void {
         if (password.length < 8) {
             throw new InvalidArgumentError(
-                'Password must be at least 8 characters long',
+                'La contraseña debe tener al menos 8 caracteres',
             );
         }
         if (password.length > 64) {
             throw new InvalidArgumentError(
-                'Password must be no more than 64 characters long',
+                'La contraseña no debe tener más de 64 caracteres',
             );
         }
     }
@@ -118,12 +118,12 @@ export class UserEntity extends BaseEntity {
     private static validateUsername(username: string): void {
         if (username.length < 3) {
             throw new InvalidArgumentError(
-                'Username must be at least 3 characters long',
+                'El nombre de usuario debe tener al menos 3 caracteres',
             );
         }
         if (username.length > 100) {
             throw new InvalidArgumentError(
-                'Username must be no more than 100 characters long',
+                'El nombre de usuario no debe tener más de 100 caracteres',
             );
         }
     }

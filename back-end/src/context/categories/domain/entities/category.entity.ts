@@ -31,7 +31,7 @@ export class CategoryEntity extends BaseEntity {
 
     public addSubCategory(subCategory: SubCategory): void {
         if (this.subcategoryNameSet.has(subCategory.name)) {
-            throw new InvalidArgumentError('Subcategory already exists');
+            throw new InvalidArgumentError('La subcategoría ya existe');
         }
         this.subCategories.push(subCategory);
         this.subcategoryNameSet.add(subCategory.name);
@@ -67,12 +67,12 @@ export class CategoryEntity extends BaseEntity {
     private static validateName(name: string): void {
         if (name.length < 3) {
             throw new InvalidArgumentError(
-                'Name must be at least 3 characters long',
+                'El nombre de la categoría debe tener al menos 3 caracteres',
             );
         }
         if (name.length > 100) {
             throw new InvalidArgumentError(
-                'Name must be no more than 100 characters long',
+                'El nombre de la categoría no debe tener más de 100 caracteres',
             );
         }
     }
