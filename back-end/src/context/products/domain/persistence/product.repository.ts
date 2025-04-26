@@ -9,4 +9,6 @@ export interface ProductRepository {
         filter: Filter<DocumentPrimitives<ProductEntity>>,
         options?: FindOptions,
     ): Promise<ProductEntity[]>;
+
+    findById(id: string): Promise<ProductEntity | null>;
 }

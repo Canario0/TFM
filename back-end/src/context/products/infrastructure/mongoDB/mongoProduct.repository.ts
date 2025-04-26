@@ -51,4 +51,9 @@ export class MongoProductRepository
             .toArray();
         return products.map(this.hydrate);
     }
+
+    async findById(id: string): Promise<ProductEntity | null> {
+        const product = await this.collection().findOne({ _id: id });
+        return product ? this.hydrate(product) : null;
+    }
 }
