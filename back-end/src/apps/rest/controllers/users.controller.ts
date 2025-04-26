@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Get,
     HttpCode,
     Param,
     ParseUUIDPipe,
@@ -18,6 +19,7 @@ import Logout from 'src/context/users/application/logout/logout';
 import PromoteUser from 'src/context/users/application/promote/promote';
 import { UserRole } from 'src/context/users/domain/entities/user.entity';
 import { Auth } from '../decorators/auth.decorator';
+import { FindAllUsers } from 'src/context/users/application/findAll/findAllUsers';
 
 @Controller('users')
 @ApiTags('Users')
@@ -27,6 +29,7 @@ export class UsersController {
         private readonly loginService: Login,
         private readonly logoutService: Logout,
         private readonly promoteUser: PromoteUser,
+        private readonly findAllUsers: FindAllUsers,
     ) {}
 
     @Post('/register')
@@ -66,6 +69,22 @@ export class UsersController {
     })
     async promote(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
         await this.promoteUser.run(id);
+    }
+
+    @Get('/')
+    @Auth(UserRole.ADMIN)
+    @ApiOperation({ summary: 'Get all users' })
+    @ApiResponse({
+        status: 200,
+        description: 'The users have been successfully retrieved.',
+        type: UserDto,
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'The users have not been retrieved.',
+    })
+    async findAll(): Promise<UserDto[]> {
+        return this.findAllUsers.run();
     }
 
     @Post('/login')

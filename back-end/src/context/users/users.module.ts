@@ -10,6 +10,7 @@ import { MongoBlacklistRepository } from './infrastructure/mongoDB/mongoBlacklis
 import Logout from './application/logout/logout';
 import CheckBlacklist from './application/checkBlacklist/checkBlacklist';
 import PromoteUser from './application/promote/promote';
+import { FindAllUsers } from './application/findAll/findAllUsers';
 
 @Module({
     imports: [SharedModule],
@@ -28,7 +29,15 @@ import PromoteUser from './application/promote/promote';
         Logout,
         CheckBlacklist,
         PromoteUser,
+        FindAllUsers,
     ],
-    exports: [RegisterUser, Login, Logout, CheckBlacklist, PromoteUser],
+    exports: [
+        RegisterUser,
+        Login,
+        Logout,
+        CheckBlacklist,
+        PromoteUser,
+        FindAllUsers,
+    ],
 })
 export class UsersModule {}
