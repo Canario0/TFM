@@ -4,6 +4,7 @@ import { PRODUCT_REPOSITORY } from './domain/persistence/product.repository';
 import { MongoProductRepository } from './infrastructure/mongoDB/mongoProduct.repository';
 import { FindAllProducts } from './application/findAll/findAllCategories';
 import { FindProductById } from './application/findById/findProductById';
+import { CreateProduct } from './application/create/create';
 
 @Module({
     imports: [SharedModule],
@@ -14,7 +15,8 @@ import { FindProductById } from './application/findById/findProductById';
         },
         FindAllProducts,
         FindProductById,
+        CreateProduct,
     ],
-    exports: [FindAllProducts, FindProductById],
+    exports: [FindAllProducts, FindProductById, CreateProduct],
 })
 export class ProductsModule {}

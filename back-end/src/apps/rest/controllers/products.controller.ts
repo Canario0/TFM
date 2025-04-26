@@ -1,9 +1,13 @@
-import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FindAllProducts } from 'src/context/products/application/findAll/findAllCategories';
 import { ProductSummaryDto } from 'src/context/products/application/findAll/productSummary.dto';
 import { FindProductById } from 'src/context/products/application/findById/findProductById';
 import { ProductDto } from 'src/context/products/application/product.dto';
+import { Auth } from '../decorators/auth.decorator';
+import { UserRole } from 'src/context/users/domain/entities/user.entity';
+import { CreateProduct } from 'src/context/products/application/create/create';
+import { CreateProductDto } from 'src/context/products/application/create/createProduct.dto';
 
 @Controller('products')
 @ApiTags('Products')
@@ -11,6 +15,7 @@ export class ProductsController {
     constructor(
         private readonly findAllProducts: FindAllProducts,
         private readonly findProductById: FindProductById,
+        private readonly createProduct: CreateProduct,
     ) {}
 
     @Get('/')
@@ -41,5 +46,21 @@ export class ProductsController {
     })
     oneById(@Param('id', ParseUUIDPipe) id: string): Promise<ProductDto> {
         return this.findProductById.run(id);
+    }
+
+    @Post('/')
+    @Auth(UserRole.ADMIN, UserRole.USER)
+    @ApiOperation({ summary: 'Create a product' })
+    @ApiResponse({
+        status: 201,
+        description: 'The product has been successfully created.',
+        type: ProductDto,
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'The product is not valid.',
+    })
+    create(@Body() product: CreateProductDto): Promise<ProductDto> {
+        return this.createProduct.run(product);
     }
 }

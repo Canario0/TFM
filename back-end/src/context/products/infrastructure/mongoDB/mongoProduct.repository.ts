@@ -56,4 +56,22 @@ export class MongoProductRepository
         const product = await this.collection().findOne({ _id: id });
         return product ? this.hydrate(product) : null;
     }
+
+    async create(product: ProductEntity): Promise<ProductEntity> {
+        const { id, ...productPrimitivesWithoutId } = product.toPrimitives();
+        try {
+            await this.collection().insertOne({
+                ...productPrimitivesWithoutId,
+                _id: id,
+            } as DocumentPrimitives<ProductEntity>);
+            return product;
+        } catch (error) {
+            if (error instanceof MongoError && error.code === 11000) {
+                throw new AlreadyExistsError(
+                    'El producto con ese nombre y categoría ya existe',
+                );
+            }
+            throw error;
+        }
+    }
 }

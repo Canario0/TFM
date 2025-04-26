@@ -11,4 +11,6 @@ export interface ProductRepository {
     ): Promise<ProductEntity[]>;
 
     findById(id: string): Promise<ProductEntity | null>;
+
+    create(product: ProductEntity): Promise<ProductEntity>;
 }
