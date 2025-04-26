@@ -17,7 +17,7 @@ export class CreateCategory {
     ) {}
 
     async run(categoryRaw: CreateCategoryDto): Promise<CategoryDto> {
-        const category = await CategoryEntity.createCategory(
+        const category = CategoryEntity.createCategory(
             randomUUID(),
             categoryRaw.name,
             categoryRaw.icon,

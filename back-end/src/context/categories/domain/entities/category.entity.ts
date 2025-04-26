@@ -55,11 +55,11 @@ export class CategoryEntity extends BaseEntity {
         );
     }
 
-    public static async createCategory(
+    public static createCategory(
         id: string,
         name: string,
         icon?: Icons,
-    ): Promise<CategoryEntity> {
+    ): CategoryEntity {
         this.validateName(name);
         return new CategoryEntity(id, name, icon ?? Icons.Other, []);
     }
