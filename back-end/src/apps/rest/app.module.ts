@@ -9,6 +9,8 @@ import { APP_FILTER } from '@nestjs/core';
 import { ErrorHandler } from './error.handler';
 import { CategoriesModule } from 'src/context/categories/categories.module';
 import { CategoriesController } from './controllers/categories.controller';
+import { ProductsModule } from 'src/context/products/products.module';
+import { ProductsController } from './controllers/products.controller';
 
 @Module({
     imports: [
@@ -19,8 +21,9 @@ import { CategoriesController } from './controllers/categories.controller';
         SharedModule,
         UsersModule,
         CategoriesModule,
+        ProductsModule,
     ],
-    controllers: [UsersController, CategoriesController],
+    controllers: [UsersController, CategoriesController, ProductsController],
     providers: [
         {
             provide: APP_FILTER,
