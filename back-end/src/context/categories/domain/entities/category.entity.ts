@@ -93,6 +93,7 @@ export enum CategoryIcons {
 }
 
 export class CategoryEntity extends BaseEntity {
+    private subcategoryNameSet: Set<string>;
     constructor(
         public readonly id: string,
         public readonly name: string,
@@ -100,6 +101,9 @@ export class CategoryEntity extends BaseEntity {
         public readonly subCategories: SubCategory[],
     ) {
         super();
+        this.subcategoryNameSet = new Set(
+            this.subCategories.map((subCategory) => subCategory.name),
+        );
     }
 
     public toPrimitives(): Primitives<CategoryEntity> {
@@ -114,14 +118,11 @@ export class CategoryEntity extends BaseEntity {
     }
 
     public addSubCategory(subCategory: SubCategory): void {
-        if (
-            this.subCategories.some(
-                (subCategory) => subCategory.name === subCategory.name,
-            )
-        ) {
+        if (this.subcategoryNameSet.has(subCategory.name)) {
             throw new InvalidArgumentError('Subcategory already exists');
         }
         this.subCategories.push(subCategory);
+        this.subcategoryNameSet.add(subCategory.name);
     }
 
     public removeSubCategory(subCategory: SubCategory): void {

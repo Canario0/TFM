@@ -4,7 +4,6 @@ import {
     CategoryRepository,
 } from '../../domain/persistence/category.repository';
 import { CategoryDto } from '../category.dto';
-import NotFoundError from 'src/context/shared/domain/errors/notFoundError';
 import { CreateCategoryDto } from './createCategory.dto';
 import {
     CategoryEntity,
