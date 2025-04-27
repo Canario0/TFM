@@ -56,6 +56,7 @@ export class MongoBlacklistRepository
             },
             { upsert: true },
         );
+        blacklist.commit();
         return blacklist;
     }
 }

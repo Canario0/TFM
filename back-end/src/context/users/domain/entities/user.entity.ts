@@ -40,6 +40,7 @@ export class UserEntity extends AggregateRoot {
             return;
         }
         this.role = UserRole.ADMIN;
+        this.markDirty('role');
     }
 
     public toPrimitives(): Primitives<UserEntity> {

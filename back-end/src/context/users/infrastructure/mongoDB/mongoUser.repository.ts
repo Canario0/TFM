@@ -57,22 +57,25 @@ export class MongoUserRepository
             ...userPrimitivesWithoutId,
             _id: id,
         });
+        user.commit();
         return user;
     }
 
     async update(user: UserEntity): Promise<UserEntity> {
-        const { id, ...userPrimitives } = user.toPrimitives();
+        if (!user.isDirty()) {
+            return user;
+        }
         const result = await this.collection().updateOne(
-            { _id: id, version: user.version },
+            { _id: user.id, version: user.version },
             {
-                $set: { ...userPrimitives },
+                $set: { ...user.getDirtyPrimitives() },
                 $inc: { version: 1 },
             },
         );
         if (result.modifiedCount === 0) {
-            throw new ConcurrencyError('User has been modified');
+            throw new ConcurrencyError('El usuario ha sido modificado');
         }
-        user.incrementVersion();
+        user.commit();
         return user;
     }
 

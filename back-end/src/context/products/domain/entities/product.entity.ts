@@ -56,6 +56,8 @@ export class ProductEntity extends AggregateRoot {
     public addReview(review: ReviewEntity): void {
         this.reviews.push(review);
         this.rating = this.computeAverageRating();
+        this.markDirty('reviews');
+        this.markDirty('rating');
     }
 
     public addSubCategory(subCategory: ProductSubCategory): void {
@@ -64,6 +66,7 @@ export class ProductEntity extends AggregateRoot {
         }
         this.subCategories.push(subCategory);
         this.subcategoryNameSet.add(subCategory.name);
+        this.markDirty('subCategories');
     }
 
     public toPrimitives(): Primitives<ProductEntity> {

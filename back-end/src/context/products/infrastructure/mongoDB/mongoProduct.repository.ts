@@ -65,6 +65,7 @@ export class MongoProductRepository
                 ...productPrimitivesWithoutId,
                 _id: id,
             } as DocumentPrimitives<ProductEntity>);
+            product.commit();
             return product;
         } catch (error) {
             if (error instanceof MongoError && error.code === 11000) {
@@ -77,13 +78,16 @@ export class MongoProductRepository
     }
 
     async update(product: ProductEntity): Promise<ProductEntity> {
-        const { id, ...productPrimitivesWithoutId } = product.toPrimitives();
+        if (!product.isDirty()) {
+            return product;
+        }
+        const primitives = product.getDirtyPrimitives();
         try {
             const result = await this.collection().updateOne(
-                { _id: id, version: product.version },
+                { _id: product.id, version: product.version },
                 {
                     $set: {
-                        ...(productPrimitivesWithoutId as DocumentPrimitives<ProductEntity>),
+                        ...primitives,
                     },
                     $inc: { version: 1 },
                 },
@@ -91,7 +95,7 @@ export class MongoProductRepository
             if (result.modifiedCount === 0) {
                 throw new ConcurrencyError('El producto ha sido modificado');
             }
-            product.incrementVersion();
+            product.commit();
             return product;
         } catch (error) {
             if (error instanceof MongoError && error.code === 11000) {

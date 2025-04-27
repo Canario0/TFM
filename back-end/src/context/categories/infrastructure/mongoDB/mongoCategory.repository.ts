@@ -66,6 +66,7 @@ export class MongoCategoryRepository
                 ...categoryPrimitivesWithoutId,
                 _id: id,
             } as DocumentPrimitives<CategoryEntity>);
+            category.commit();
             return category;
         } catch (error) {
             if (error instanceof MongoError && error.code === 11000) {

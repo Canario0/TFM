@@ -45,12 +45,14 @@ export class CategoryEntity extends AggregateRoot {
         }
         this.subCategories.push(subCategory);
         this.subcategoryNameSet.add(subCategory.name);
+        this.markDirty('subCategories');
     }
 
     public removeSubCategory(subCategory: SubCategory): void {
         const index = this.subCategories.indexOf(subCategory);
         if (index !== -1) {
             this.subCategories.splice(index, 1);
+            this.markDirty('subCategories');
         }
     }
 
