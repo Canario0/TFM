@@ -1,18 +1,21 @@
 import { Primitives } from '@codelytv/primitives-type';
-import BaseEntity from 'src/context/shared/domain/entities/baseEntity';
+import AggregateRoot from 'src/context/shared/domain/entities/aggregateRoot';
 
-export class BlacklistEntity extends BaseEntity {
-    constructor(
-        public readonly jti: string,
-        public readonly expiresAt: Date,
-    ) {
-        super();
+export class BlacklistEntity extends AggregateRoot {
+    public readonly jti: string;
+    public readonly expiresAt: Date;
+
+    constructor(jti: string, expiresAt: Date, version?: number) {
+        super(version);
+        this.jti = jti;
+        this.expiresAt = expiresAt;
     }
 
     public toPrimitives(): Primitives<BlacklistEntity> {
         return {
             jti: this.jti,
             expiresAt: this.expiresAt.getTime(),
+            version: this.version,
         };
     }
 
@@ -22,6 +25,7 @@ export class BlacklistEntity extends BaseEntity {
         return new BlacklistEntity(
             primitives.jti,
             new Date(primitives.expiresAt),
+            primitives.version,
         );
     }
 

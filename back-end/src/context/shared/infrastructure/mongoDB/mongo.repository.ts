@@ -1,7 +1,7 @@
 import { Collection, MongoClient } from 'mongodb';
-import BaseEntity from '../../domain/entities/baseEntity';
+import AggregateRoot from '../../domain/entities/aggregateRoot';
 
-export abstract class MongoRepository<T extends BaseEntity> {
+export abstract class MongoRepository<T extends AggregateRoot> {
     constructor(protected readonly client: MongoClient) {}
 
     protected abstract collectionName(): string;

@@ -1,30 +1,56 @@
 import { Primitives } from '@codelytv/primitives-type';
-import BaseEntity from 'src/context/shared/domain/entities/baseEntity';
+import AggregateRoot from 'src/context/shared/domain/entities/aggregateRoot';
 import InvalidArgumentError from 'src/context/shared/domain/errors/invalidArgumentError';
 import { Icons } from 'src/context/shared/domain/types';
 import { ReviewEntity } from './review.entity';
 import { ProductSubCategory } from './productSubCategory.entity';
 
-export class ProductEntity extends BaseEntity {
+export class ProductEntity extends AggregateRoot {
+    public readonly id: string;
+    public name: string;
+    public readonly icon: Icons;
+    public readonly category: string;
+    public rating: number;
+    public maker: string;
+    public brand: string;
+    public model: string;
+    public price: number;
+    public reviews: ReviewEntity[];
+    public subCategories: ProductSubCategory[];
+    public description?: string;
     private subcategoryNameSet: Set<string>;
+
     constructor(
-        public readonly id: string,
-        public name: string,
-        public readonly icon: Icons,
-        public readonly category: string,
-        public rating: number,
-        public maker: string,
-        public brand: string,
-        public model: string,
-        public price: number,
-        public reviews: ReviewEntity[],
-        public subCategories: ProductSubCategory[],
-        public description?: string,
+        id: string,
+        name: string,
+        icon: Icons,
+        category: string,
+        rating: number,
+        maker: string,
+        brand: string,
+        model: string,
+        price: number,
+        reviews: ReviewEntity[],
+        subCategories: ProductSubCategory[],
+        description?: string,
+        version?: number,
     ) {
-        super();
+        super(version);
+        this.id = id;
+        this.name = name;
+        this.icon = icon;
+        this.category = category;
+        this.rating = rating;
+        this.maker = maker;
+        this.brand = brand;
+        this.model = model;
+        this.price = price;
+        this.reviews = reviews;
+        this.subCategories = subCategories;
         this.subcategoryNameSet = new Set(
             this.subCategories.map((sc) => sc.name),
         );
+        this.description = description;
     }
 
     public addReview(review: ReviewEntity): void {
@@ -54,6 +80,7 @@ export class ProductEntity extends BaseEntity {
             reviews: this.reviews.map((r) => r.toPrimitives()),
             subCategories: this.subCategories.map((sc) => sc.toPrimitives()),
             description: this.description,
+            version: this.version,
         };
     }
 
@@ -84,6 +111,7 @@ export class ProductEntity extends BaseEntity {
             primitives.reviews.map(ReviewEntity.fromPrimitives),
             primitives.subCategories.map(ProductSubCategory.fromPrimitives),
             primitives.description,
+            primitives.version,
         );
     }
 

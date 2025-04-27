@@ -1,5 +1,5 @@
 import { Primitives } from '@codelytv/primitives-type';
-import BaseEntity from 'src/context/shared/domain/entities/baseEntity';
+import AggregateRoot from 'src/context/shared/domain/entities/aggregateRoot';
 import { hash, verify } from 'argon2';
 import InvalidArgumentError from 'src/context/shared/domain/errors/invalidArgumentError';
 import UnauthorizedError from 'src/context/shared/domain/errors/unauthorizedError';
@@ -11,14 +11,24 @@ export enum UserRole {
     USER = 'USER',
 }
 
-export class UserEntity extends BaseEntity {
+export class UserEntity extends AggregateRoot {
+    public readonly id: string;
+    public username: string;
+    public readonly password: string;
+    public role: UserRole;
+
     constructor(
-        public id: string,
-        public username: string,
-        public password: string,
-        public role: UserRole,
+        id: string,
+        username: string,
+        password: string,
+        role: UserRole,
+        version?: number,
     ) {
-        super();
+        super(version);
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
     public isAdmin(): boolean {
@@ -38,6 +48,7 @@ export class UserEntity extends BaseEntity {
             username: this.username,
             password: this.password,
             role: this.role,
+            version: this.version,
         };
     }
 
@@ -65,6 +76,7 @@ export class UserEntity extends BaseEntity {
             primitives.username,
             primitives.password,
             primitives.role,
+            primitives.version,
         );
     }
 

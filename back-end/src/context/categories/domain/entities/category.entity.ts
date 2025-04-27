@@ -1,18 +1,27 @@
 import { Primitives } from '@codelytv/primitives-type';
-import BaseEntity from 'src/context/shared/domain/entities/baseEntity';
+import AggregateRoot from 'src/context/shared/domain/entities/aggregateRoot';
 import InvalidArgumentError from 'src/context/shared/domain/errors/invalidArgumentError';
 import { Icons } from 'src/context/shared/domain/types';
 import { SubCategory } from './subCategory.entity';
 
-export class CategoryEntity extends BaseEntity {
+export class CategoryEntity extends AggregateRoot {
+    public readonly id: string;
+    public readonly name: string;
+    public readonly icon: Icons;
+    public readonly subCategories: SubCategory[];
     private subcategoryNameSet: Set<string>;
     constructor(
-        public readonly id: string,
-        public readonly name: string,
-        public readonly icon: Icons,
-        public readonly subCategories: SubCategory[],
+        id: string,
+        name: string,
+        icon: Icons,
+        subCategories: SubCategory[],
+        version?: number,
     ) {
-        super();
+        super(version);
+        this.id = id;
+        this.name = name;
+        this.icon = icon;
+        this.subCategories = subCategories;
         this.subcategoryNameSet = new Set(
             this.subCategories.map((subCategory) => subCategory.name),
         );
@@ -26,6 +35,7 @@ export class CategoryEntity extends BaseEntity {
             subCategories: this.subCategories.map((subCategory) =>
                 subCategory.toPrimitives(),
             ),
+            version: this.version,
         };
     }
 
