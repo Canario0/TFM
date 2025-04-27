@@ -20,6 +20,7 @@ import { CreateProduct } from 'src/context/products/application/create/create';
 import { CreateProductDto } from 'src/context/products/application/create/createProduct.dto';
 import { ReviewProduct } from 'src/context/products/application/review/reviewProduct';
 import { TokenInfo } from '../decorators/tokenInfo.decorator';
+import { CreateReviewDto } from 'src/context/products/application/review/createReview.dto';
 
 @Controller('products')
 @ApiTags('Products')
@@ -62,6 +63,7 @@ export class ProductsController {
     }
 
     @Post('/:id/reviews')
+    @Auth(UserRole.ADMIN, UserRole.USER)
     @ApiOperation({ summary: 'Post a product review' })
     @ApiResponse({
         status: 201,
@@ -82,7 +84,7 @@ export class ProductsController {
     })
     createReview(
         @Param('id', ParseUUIDPipe) id: string,
-        @Body() review: ReviewDto,
+        @Body() review: CreateReviewDto,
         @TokenInfo() tokenInfo: { username: string; sub: string },
     ): Promise<ReviewDto> {
         return this.reviewProduct.run(

@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
     IsArray,
     IsEnum,
+    IsInt,
     IsNumber,
     IsObject,
     IsOptional,
@@ -66,16 +67,16 @@ export class ReviewDto {
     user: UserDto;
 
     @ApiProperty()
+    @IsInt()
     @Max(10)
     @Min(1)
-    @IsNumber()
     rating: number;
 
     @ApiProperty()
-    @IsString()
     @Length(0, 250, {
         message: 'Comment must be between 0 and 250 characters',
     })
+    @IsString()
     comment: string;
 
     constructor(review: ReviewEntity) {
@@ -108,9 +109,13 @@ export class ProductDto {
     category: string;
 
     @ApiProperty()
+    @IsNumber({
+        allowNaN: false,
+        allowInfinity: false,
+        maxDecimalPlaces: 2,
+    })
     @Max(10)
     @Min(1)
-    @IsNumber()
     rating: number;
 
     @ApiProperty()
@@ -135,7 +140,11 @@ export class ProductDto {
     model: string;
 
     @ApiProperty()
-    @IsNumber()
+    @IsNumber({
+        allowNaN: false,
+        allowInfinity: false,
+        maxDecimalPlaces: 2,
+    })
     @Min(0)
     price: number;
 
@@ -167,7 +176,7 @@ export class ProductDto {
         this.id = product.id;
         this.name = product.name;
         this.category = product.category;
-        this.rating = product.rating;
+        this.rating = parseFloat(product.rating.toFixed(2));
         this.maker = product.maker;
         this.brand = product.brand;
         this.model = product.model;

@@ -6,6 +6,7 @@ import {
 import { ReviewDto } from '../product.dto';
 import NotFoundError from 'src/context/shared/domain/errors/notFoundError';
 import { ReviewEntity } from '../../domain/entities/review.entity';
+import { CreateReviewDto } from './createReview.dto';
 
 @Injectable()
 export class ReviewProduct {
@@ -17,7 +18,7 @@ export class ReviewProduct {
     async run(
         productId: string,
         user: { username: string; id: string },
-        reviewRaw: ReviewDto,
+        reviewRaw: CreateReviewDto,
     ): Promise<ReviewDto> {
         const product = await this.productRepository.findById(productId);
         if (!product) {

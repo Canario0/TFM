@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './apps/rest/app.module';
 import { LOGGER } from './context/shared/domain/logger';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -10,6 +10,15 @@ async function bootstrap() {
         type: VersioningType.URI,
         defaultVersion: '1',
     });
+    app.useGlobalPipes(
+        new ValidationPipe({
+            whitelist: true,
+            transform: true,
+            validationError: {
+                target: true,
+            },
+        }),
+    );
     app.useLogger(app.get(LOGGER));
 
     const config = new DocumentBuilder()
