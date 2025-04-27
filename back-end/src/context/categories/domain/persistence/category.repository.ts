@@ -10,6 +10,5 @@ export interface CategoryRepository {
         filter: Filter<DocumentPrimitives<CategoryEntity>>,
         options?: FindOptions,
     ): Promise<CategoryEntity[]>;
-    //   count(filter: Filter<DocumentPrimitives<CategoryEntity>>): Promise<number>;
     create(category: CategoryEntity): Promise<CategoryEntity>;
 }

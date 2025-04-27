@@ -128,6 +128,7 @@ export class ProductEntity extends AggregateRoot {
         if (description === this.description) {
             return;
         }
+        if (description) ProductEntity.validateDescription(description);
         this.description = description;
         this.markDirty('description');
     }
@@ -193,6 +194,7 @@ export class ProductEntity extends AggregateRoot {
         description?: string;
     }): ProductEntity {
         this.validateName(data.name);
+        if (data.description) this.validateDescription(data.description);
         return new ProductEntity(
             data.id,
             data.name,
@@ -218,6 +220,14 @@ export class ProductEntity extends AggregateRoot {
         if (name.length > 100) {
             throw new InvalidArgumentError(
                 'El nombre del producto no debe tener más de 100 caracteres',
+            );
+        }
+    }
+
+    private static validateDescription(description: string): void {
+        if (description.length > 250) {
+            throw new InvalidArgumentError(
+                'La descripción no debe tener más de 250 caracteres',
             );
         }
     }
