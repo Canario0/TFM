@@ -60,13 +60,76 @@ export class ProductEntity extends AggregateRoot {
         this.markDirty('rating');
     }
 
+    public hasSubCategory(name: string): boolean {
+        return this.subcategoryNameSet.has(name);
+    }
+
     public addSubCategory(subCategory: ProductSubCategory): void {
-        if (this.subcategoryNameSet.has(subCategory.name)) {
+        if (this.hasSubCategory(subCategory.name)) {
             throw new InvalidArgumentError('La subcategoría ya existe');
         }
         this.subCategories.push(subCategory);
         this.subcategoryNameSet.add(subCategory.name);
         this.markDirty('subCategories');
+    }
+
+    public updateSubCategory(subCategories: ProductSubCategory[]): void {
+        const newSet = new Set(subCategories.map((sc) => sc.name));
+        if (newSet === this.subcategoryNameSet) {
+            return;
+        }
+        this.subCategories = subCategories;
+        this.subcategoryNameSet = newSet;
+        this.markDirty('subCategories');
+    }
+
+    public updateName(name: string): void {
+        if (name === this.name) {
+            return;
+        }
+        ProductEntity.validateName(name);
+        this.name = name;
+        this.markDirty('name');
+    }
+
+    public updateMaker(maker: string): void {
+        if (maker === this.maker) {
+            return;
+        }
+        this.maker = maker;
+        this.markDirty('maker');
+    }
+
+    public updateBrand(brand: string): void {
+        if (brand === this.brand) {
+            return;
+        }
+        this.brand = brand;
+        this.markDirty('brand');
+    }
+
+    public updateModel(model: string): void {
+        if (model === this.model) {
+            return;
+        }
+        this.model = model;
+        this.markDirty('model');
+    }
+
+    public updatePrice(price: number): void {
+        if (price === this.price) {
+            return;
+        }
+        this.price = price;
+        this.markDirty('price');
+    }
+
+    public updateDescription(description?: string): void {
+        if (description === this.description) {
+            return;
+        }
+        this.description = description;
+        this.markDirty('description');
     }
 
     public toPrimitives(): Primitives<ProductEntity> {
@@ -123,7 +186,6 @@ export class ProductEntity extends AggregateRoot {
         name: string;
         category: string;
         icon: Icons;
-        rating?: number;
         maker?: string;
         brand?: string;
         model?: string;
@@ -136,7 +198,7 @@ export class ProductEntity extends AggregateRoot {
             data.name,
             data.icon ?? Icons.Other,
             data.category,
-            data.rating ?? 0,
+            0,
             data.maker ?? 'desconocido',
             data.brand ?? 'desconocido',
             data.model ?? 'desconocido',

@@ -4,6 +4,7 @@ import {
     Get,
     Param,
     ParseUUIDPipe,
+    Patch,
     Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -21,6 +22,8 @@ import { CreateProductDto } from 'src/context/products/application/create/create
 import { ReviewProduct } from 'src/context/products/application/review/reviewProduct';
 import { TokenInfo } from '../decorators/tokenInfo.decorator';
 import { CreateReviewDto } from 'src/context/products/application/review/createReview.dto';
+import { UpdateProductDto } from 'src/context/products/application/update/update.dto';
+import { UpdateProduct } from 'src/context/products/application/update/updateProduct';
 
 @Controller('products')
 @ApiTags('Products')
@@ -30,6 +33,7 @@ export class ProductsController {
         private readonly findProductById: FindProductById,
         private readonly createProduct: CreateProduct,
         private readonly reviewProduct: ReviewProduct,
+        private readonly updateProduct: UpdateProduct,
     ) {}
 
     @Get('/')
@@ -60,6 +64,33 @@ export class ProductsController {
     })
     oneById(@Param('id', ParseUUIDPipe) id: string): Promise<ProductDto> {
         return this.findProductById.run(id);
+    }
+
+    @Patch('/:id')
+    @Auth(UserRole.ADMIN, UserRole.USER)
+    @ApiOperation({ summary: 'Update a product' })
+    @ApiResponse({
+        status: 200,
+        description: 'The product has been successfully updated.',
+        type: ProductDto,
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'The product has not been found.',
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'The product id is not a valid UUID.',
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'The product is not valid.',
+    })
+    update(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() product: UpdateProductDto,
+    ): Promise<ProductDto> {
+        return this.updateProduct.run(id, product);
     }
 
     @Post('/:id/reviews')
