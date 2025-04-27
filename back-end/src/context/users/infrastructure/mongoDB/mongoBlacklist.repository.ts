@@ -5,7 +5,7 @@ import { DocumentPrimitives } from '../../../shared/infrastructure/mongoDB/types
 import { BlacklistEntity } from '../../domain/entities/blacklist';
 import { BlacklistRepository } from '../../domain/persistence/blacklist.repository';
 
-type BlacklistDocument = { jti: string; expiresAt: Date };
+type BlacklistDocument = { jti: string; expiresAt: Date; version: number };
 
 @Injectable()
 export class MongoBlacklistRepository
@@ -27,6 +27,7 @@ export class MongoBlacklistRepository
         return BlacklistEntity.fromPrimitives({
             jti: document.jti,
             expiresAt: document.expiresAt.getTime(),
+            version: document.version,
         });
     }
 

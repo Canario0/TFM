@@ -4,6 +4,7 @@ import { UserRepository } from '../../domain/persistence/user.repository';
 import { UserEntity } from '../../domain/entities/user.entity';
 import { MongoRepository } from 'src/context/shared/infrastructure/mongoDB/mongo.repository';
 import { DocumentPrimitives } from 'src/context/shared/infrastructure/mongoDB/types/documentPrimitives';
+import ConcurrencyError from 'src/context/shared/domain/errors/concurrencyError';
 
 @Injectable()
 export class MongoUserRepository
@@ -61,10 +62,16 @@ export class MongoUserRepository
 
     async update(user: UserEntity): Promise<UserEntity> {
         const { id, ...userPrimitives } = user.toPrimitives();
-        await this.collection().updateOne(
-            { _id: id },
-            { $set: { ...userPrimitives } },
+        const result = await this.collection().updateOne(
+            { _id: id, version: user.version },
+            {
+                $set: { ...userPrimitives },
+                $inc: { version: 1 },
+            },
         );
+        if (result.modifiedCount === 0) {
+            throw new ConcurrencyError('User has been modified');
+        }
         return user;
     }
 

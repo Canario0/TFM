@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import AlreadyExistsError from 'src/context/shared/domain/errors/alreadyExistsError';
+import ConcurrencyError from 'src/context/shared/domain/errors/concurrencyError';
 import FailedPreconditionError from 'src/context/shared/domain/errors/failedPreconditionError';
 import ForbiddenError from 'src/context/shared/domain/errors/forbiddenError';
 import InternalError from 'src/context/shared/domain/errors/internalError';
@@ -21,6 +22,7 @@ import UnauthorizedError from 'src/context/shared/domain/errors/unauthorizedErro
     ForbiddenError,
     FailedPreconditionError,
     InternalError,
+    ConcurrencyError,
 )
 export class ErrorHandler implements ExceptionFilter {
     catch(exception: unknown, host: ArgumentsHost): void {
@@ -34,7 +36,8 @@ export class ErrorHandler implements ExceptionFilter {
         }
         if (
             exception instanceof AlreadyExistsError ||
-            exception instanceof FailedPreconditionError
+            exception instanceof FailedPreconditionError ||
+            exception instanceof ConcurrencyError
         ) {
             response
                 .status(HttpStatus.CONFLICT)
