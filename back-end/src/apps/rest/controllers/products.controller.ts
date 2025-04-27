@@ -1,13 +1,25 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Param,
+    ParseUUIDPipe,
+    Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FindAllProducts } from 'src/context/products/application/findAll/findAllCategories';
 import { ProductSummaryDto } from 'src/context/products/application/findAll/productSummary.dto';
 import { FindProductById } from 'src/context/products/application/findById/findProductById';
-import { ProductDto } from 'src/context/products/application/product.dto';
+import {
+    ProductDto,
+    ReviewDto,
+} from 'src/context/products/application/product.dto';
 import { Auth } from '../decorators/auth.decorator';
 import { UserRole } from 'src/context/users/domain/entities/user.entity';
 import { CreateProduct } from 'src/context/products/application/create/create';
 import { CreateProductDto } from 'src/context/products/application/create/createProduct.dto';
+import { ReviewProduct } from 'src/context/products/application/review/reviewProduct';
+import { TokenInfo } from '../decorators/tokenInfo.decorator';
 
 @Controller('products')
 @ApiTags('Products')
@@ -16,6 +28,7 @@ export class ProductsController {
         private readonly findAllProducts: FindAllProducts,
         private readonly findProductById: FindProductById,
         private readonly createProduct: CreateProduct,
+        private readonly reviewProduct: ReviewProduct,
     ) {}
 
     @Get('/')
@@ -42,10 +55,44 @@ export class ProductsController {
     })
     @ApiResponse({
         status: 400,
-        description: 'The category id is not a valid UUID.',
+        description: 'The product id is not a valid UUID.',
     })
     oneById(@Param('id', ParseUUIDPipe) id: string): Promise<ProductDto> {
         return this.findProductById.run(id);
+    }
+
+    @Post('/:id/reviews')
+    @ApiOperation({ summary: 'Post a product review' })
+    @ApiResponse({
+        status: 201,
+        description: 'The product review has been successfully created.',
+        type: ReviewDto,
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'The product has not been found.',
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'The product id is not a valid UUID.',
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'The review is not valid.',
+    })
+    createReview(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() review: ReviewDto,
+        @TokenInfo() tokenInfo: { username: string; sub: string },
+    ): Promise<ReviewDto> {
+        return this.reviewProduct.run(
+            id,
+            {
+                username: tokenInfo.username,
+                id: tokenInfo.sub,
+            },
+            review,
+        );
     }
 
     @Post('/')
