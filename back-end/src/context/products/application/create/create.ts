@@ -22,7 +22,6 @@ export class CreateProduct {
             name: productRaw.name,
             category: productRaw.category,
             icon: productRaw.icon,
-            rating: productRaw.rating,
             maker: productRaw.maker,
             brand: productRaw.brand,
             model: productRaw.model,

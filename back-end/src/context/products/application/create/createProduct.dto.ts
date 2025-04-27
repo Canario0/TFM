@@ -7,7 +7,6 @@ export class CreateProductDto extends PickType(ProductDto, [
     'price',
     'category',
     'icon',
-    'rating',
     'maker',
     'brand',
     'model',
