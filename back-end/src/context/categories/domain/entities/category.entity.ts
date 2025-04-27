@@ -64,6 +64,7 @@ export class CategoryEntity extends AggregateRoot {
             primitives.name,
             primitives.icon,
             primitives.subCategories.map(SubCategory.fromPrimitives),
+            primitives.version,
         );
     }
 
