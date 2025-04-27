@@ -11,6 +11,7 @@ import { DocumentPrimitives } from 'src/context/shared/infrastructure/mongoDB/ty
 import { ProductEntity } from '../../domain/entities/product.entity';
 import { ProductRepository } from '../../domain/persistence/product.repository';
 import AlreadyExistsError from 'src/context/shared/domain/errors/alreadyExistsError';
+import ConcurrencyError from 'src/context/shared/domain/errors/concurrencyError';
 
 @Injectable()
 export class MongoProductRepository
@@ -64,6 +65,33 @@ export class MongoProductRepository
                 ...productPrimitivesWithoutId,
                 _id: id,
             } as DocumentPrimitives<ProductEntity>);
+            return product;
+        } catch (error) {
+            if (error instanceof MongoError && error.code === 11000) {
+                throw new AlreadyExistsError(
+                    'El producto con ese nombre y categoría ya existe',
+                );
+            }
+            throw error;
+        }
+    }
+
+    async update(product: ProductEntity): Promise<ProductEntity> {
+        const { id, ...productPrimitivesWithoutId } = product.toPrimitives();
+        try {
+            const result = await this.collection().updateOne(
+                { _id: id, version: product.version },
+                {
+                    $set: {
+                        ...(productPrimitivesWithoutId as DocumentPrimitives<ProductEntity>),
+                    },
+                    $inc: { version: 1 },
+                },
+            );
+            if (result.modifiedCount === 0) {
+                throw new ConcurrencyError('El producto ha sido modificado');
+            }
+            product.incrementVersion();
             return product;
         } catch (error) {
             if (error instanceof MongoError && error.code === 11000) {

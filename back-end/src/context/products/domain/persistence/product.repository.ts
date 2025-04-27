@@ -9,8 +9,7 @@ export interface ProductRepository {
         filter: Filter<DocumentPrimitives<ProductEntity>>,
         options?: FindOptions,
     ): Promise<ProductEntity[]>;
-
     findById(id: string): Promise<ProductEntity | null>;
-
     create(product: ProductEntity): Promise<ProductEntity>;
+    update(product: ProductEntity): Promise<ProductEntity>;
 }

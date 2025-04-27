@@ -72,6 +72,7 @@ export class MongoUserRepository
         if (result.modifiedCount === 0) {
             throw new ConcurrencyError('User has been modified');
         }
+        user.incrementVersion();
         return user;
     }
 

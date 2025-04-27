@@ -60,7 +60,7 @@ class UserDto {
     username: string;
 }
 
-class ReviewDto {
+export class ReviewDto {
     @ApiProperty({ type: UserDto })
     @ValidateNested()
     user: UserDto;

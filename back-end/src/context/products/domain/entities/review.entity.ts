@@ -1,17 +1,14 @@
 import { Primitives } from '@codelytv/primitives-type';
-import AggregateRoot from 'src/context/shared/domain/entities/aggregateRoot';
 import InvalidArgumentError from 'src/context/shared/domain/errors/invalidArgumentError';
 
 type User = { id: string; username: string };
 
-export class ReviewEntity extends AggregateRoot {
+export class ReviewEntity {
     constructor(
         public readonly user: User,
         public readonly rating: number,
         public comment: string,
-    ) {
-        super();
-    }
+    ) {}
 
     public toPrimitives(): Primitives<ReviewEntity> {
         return {
