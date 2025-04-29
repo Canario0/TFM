@@ -3,7 +3,15 @@ import AggregateRoot from 'src/context/shared/domain/entities/aggregateRoot';
 import InvalidArgumentError from 'src/context/shared/domain/errors/invalidArgumentError';
 import { Icons } from 'src/context/shared/domain/types';
 import { ReviewEntity } from './review.entity';
-import { ProductSubCategory } from './productSubCategory.entity';
+import {
+    ProductSubCategory,
+    ProductSubCategoryPrimitives,
+} from './productSubCategory.entity';
+
+export type ProductPrimitives = Omit<
+    Primitives<ProductEntity>,
+    'subCategories'
+> & { subCategories: ProductSubCategoryPrimitives[] };
 
 export class ProductEntity extends AggregateRoot {
     public readonly id: string;
@@ -133,7 +141,7 @@ export class ProductEntity extends AggregateRoot {
         this.markDirty('description');
     }
 
-    public toPrimitives(): Primitives<ProductEntity> {
+    public toPrimitives(): ProductPrimitives {
         return {
             id: this.id,
             name: this.name,
@@ -163,7 +171,7 @@ export class ProductEntity extends AggregateRoot {
     }
 
     public static fromPrimitives(
-        primitives: Primitives<ProductEntity>,
+        primitives: ProductPrimitives,
     ): ProductEntity {
         return new ProductEntity(
             primitives.id,

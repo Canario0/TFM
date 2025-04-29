@@ -3,12 +3,15 @@ import {
     Controller,
     Get,
     Param,
+    ParseArrayPipe,
     ParseUUIDPipe,
     Patch,
     Post,
+    Query,
+    ValidationPipe,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { FindAllProducts } from 'src/context/products/application/findAll/findAllCategories';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FindAllProducts } from 'src/context/products/application/findAll/findAllProducts';
 import { ProductSummaryDto } from 'src/context/products/application/findAll/productSummary.dto';
 import { FindProductById } from 'src/context/products/application/findById/findProductById';
 import {
@@ -24,6 +27,7 @@ import { TokenInfo } from '../decorators/tokenInfo.decorator';
 import { CreateReviewDto } from 'src/context/products/application/review/createReview.dto';
 import { UpdateProductDto } from 'src/context/products/application/update/update.dto';
 import { UpdateProduct } from 'src/context/products/application/update/updateProduct';
+import { ProductFilterDto } from '../dtos/productFilter.dto';
 
 @Controller('products')
 @ApiTags('Products')
@@ -38,13 +42,23 @@ export class ProductsController {
 
     @Get('/')
     @ApiOperation({ summary: 'Get all products in preview mode' })
+    @ApiQuery({
+        name: 'id',
+        type: String,
+        required: false,
+        isArray: true,
+        format: 'uuid',
+    })
     @ApiResponse({
         status: 200,
         description: 'The products have been successfully retrieved.',
         type: [ProductSummaryDto],
     })
-    all(): Promise<ProductSummaryDto[]> {
-        return this.findAllProducts.run();
+    all(@Query() query: ProductFilterDto): Promise<ProductSummaryDto[]> {
+        return this.findAllProducts.run(
+            (query.id && query.id.length > 0 && { _id: { $in: query.id } }) ||
+                undefined,
+        );
     }
 
     @Get('/:id')

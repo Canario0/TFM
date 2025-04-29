@@ -16,7 +16,7 @@ export class FindProductById {
     async run(id: string): Promise<ProductDto> {
         const product = await this.productRepository.findById(id);
         if (!product) {
-            throw new NotFoundError('Product not found');
+            throw new NotFoundError('El producto no se ha encontrado');
         }
         return ProductDto.fromEntity(product);
     }

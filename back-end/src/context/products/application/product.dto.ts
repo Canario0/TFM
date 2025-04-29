@@ -17,6 +17,23 @@ import { Icons } from 'src/context/shared/domain/types';
 import { ProductSubCategory } from '../domain/entities/productSubCategory.entity';
 import { ReviewEntity } from '../domain/entities/review.entity';
 import { ProductEntity } from '../domain/entities/product.entity';
+import { Type } from 'class-transformer';
+
+class ProductMetadataDto {
+    @ApiProperty()
+    @Length(3, 100, {
+        message: 'Key must be between 3 and 100 characters',
+    })
+    @IsString()
+    key: string;
+
+    @ApiProperty()
+    @Length(3, 100, {
+        message: 'Value must be between 3 and 100 characters',
+    })
+    @IsString()
+    value: string;
+}
 
 class ProductSubCategoryDto {
     @ApiProperty()
@@ -32,10 +49,11 @@ class ProductSubCategoryDto {
     })
     icon: Icons;
 
-    @ApiProperty()
-    @IsObject({ each: true })
+    @ApiProperty({ type: [ProductMetadataDto] })
     @IsArray()
-    metadata: Record<string, string>[];
+    @ValidateNested({ each: true })
+    @Type(() => ProductMetadataDto)
+    metadata: ProductMetadataDto[];
 
     constructor(subCategory: ProductSubCategory) {
         this.name = subCategory.name;
@@ -163,13 +181,15 @@ export class ProductDto {
     icon: Icons;
 
     @ApiProperty({ type: [ProductSubCategoryDto] })
-    @ValidateNested({ each: true })
     @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ProductSubCategory)
     subCategories: ProductSubCategoryDto[];
 
     @ApiProperty({ type: [ReviewDto] })
-    @ValidateNested({ each: true })
     @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ReviewDto)
     reviews: ReviewDto[];
 
     constructor(product: ProductEntity) {
