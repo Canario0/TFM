@@ -1,17 +1,19 @@
 import { Primitives } from '@codelytv/primitives-type';
 import AggregateRoot from 'src/context/shared/domain/entities/aggregateRoot';
 import InvalidArgumentError from 'src/context/shared/domain/errors/invalidArgumentError';
-import { Icons } from 'src/context/shared/domain/types';
 
 export class ComparisonEntity extends AggregateRoot {
     public readonly id: string;
     public readonly ownerId: string;
     public name: string;
     public description?: string;
+    public productIds: string[];
+
     constructor(
         id: string,
         ownerId: string,
         name: string,
+        productIds: string[],
         description?: string,
         version?: number,
     ) {
@@ -19,7 +21,37 @@ export class ComparisonEntity extends AggregateRoot {
         this.id = id;
         this.ownerId = ownerId;
         this.name = name;
+        this.productIds = productIds;
         this.description = description;
+    }
+
+    public updateName(name: string): void {
+        if (name === this.name) {
+            return;
+        }
+        ComparisonEntity.validateName(name);
+        this.name = name;
+        this.markDirty('name');
+    }
+
+    public updateDescription(description: string): void {
+        if (description === this.description) {
+            return;
+        }
+        ComparisonEntity.validateDescription(description);
+        this.description = description;
+        this.markDirty('description');
+    }
+
+    public updateProductIds(productIds: string[]): void {
+        if (
+            this.productIds.length === productIds.length &&
+            this.productIds.every((id, index) => id === productIds[index])
+        ) {
+            return;
+        }
+        this.productIds = productIds;
+        this.markDirty('productIds');
     }
 
     public toPrimitives(): Primitives<ComparisonEntity> {
@@ -27,6 +59,7 @@ export class ComparisonEntity extends AggregateRoot {
             id: this.id,
             ownerId: this.ownerId,
             name: this.name,
+            productIds: this.productIds,
             description: this.description,
             version: this.version,
         };
@@ -39,6 +72,7 @@ export class ComparisonEntity extends AggregateRoot {
             primitives.id,
             primitives.ownerId,
             primitives.name,
+            primitives.productIds,
             primitives.description,
             primitives.version,
         );
@@ -48,11 +82,12 @@ export class ComparisonEntity extends AggregateRoot {
         id: string,
         ownerId: string,
         name: string,
+        product: string[],
         description?: string,
     ): ComparisonEntity {
         this.validateName(name);
         if (description) this.validateDescription(description);
-        return new ComparisonEntity(id, ownerId, name, description);
+        return new ComparisonEntity(id, ownerId, name, product, description);
     }
 
     private static validateName(name: string): void {

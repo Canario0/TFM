@@ -3,12 +3,10 @@ import {
     Controller,
     Get,
     Param,
-    ParseArrayPipe,
     ParseUUIDPipe,
     Patch,
     Post,
     Query,
-    ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FindAllProducts } from 'src/context/products/application/findAll/findAllProducts';

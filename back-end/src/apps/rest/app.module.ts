@@ -12,6 +12,7 @@ import { CategoriesController } from './controllers/categories.controller';
 import { ProductsModule } from 'src/context/products/products.module';
 import { ProductsController } from './controllers/products.controller';
 import { ComparisonsModule } from 'src/context/comparisons/comparisons.module';
+import { ComparisonsController } from './controllers/comparisons.controller';
 
 @Module({
     imports: [
@@ -25,7 +26,12 @@ import { ComparisonsModule } from 'src/context/comparisons/comparisons.module';
         ProductsModule,
         ComparisonsModule,
     ],
-    controllers: [UsersController, CategoriesController, ProductsController],
+    controllers: [
+        UsersController,
+        CategoriesController,
+        ProductsController,
+        ComparisonsController,
+    ],
     providers: [
         {
             provide: APP_FILTER,
