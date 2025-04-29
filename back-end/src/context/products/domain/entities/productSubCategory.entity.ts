@@ -4,7 +4,10 @@ import { Icons } from 'src/context/shared/domain/types';
 
 type Metadata = { key: string; value: string };
 
-export type ProductSubCategoryPrimitives = Omit<Primitives<ProductSubCategory>, 'metadata'> & {
+export type ProductSubCategoryPrimitives = Omit<
+    Primitives<ProductSubCategory>,
+    'metadata'
+> & {
     metadata: Metadata[];
 };
 

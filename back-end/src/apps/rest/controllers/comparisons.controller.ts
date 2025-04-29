@@ -63,7 +63,7 @@ export class ComparisonsController {
         description: 'The comparison id is not a valid UUID.',
     })
     oneById(
-       @Param('id', ParseUUIDPipe) id: string,
+        @Param('id', ParseUUIDPipe) id: string,
         @TokenInfo() tokenInfo: { sub: string },
     ): Promise<ComparisonDto> {
         return this.findComparisonById.run(tokenInfo.sub, id);
@@ -109,7 +109,7 @@ export class ComparisonsController {
         description: 'The comparison is not valid.',
     })
     update(
-       @Param('id', ParseUUIDPipe) id: string,
+        @Param('id', ParseUUIDPipe) id: string,
         @Body() comparison: UpdateComparisonDto,
         @TokenInfo() tokenInfo: { sub: string },
     ): Promise<ComparisonDto> {
@@ -127,7 +127,7 @@ export class ComparisonsController {
         description: 'The comparison id is not a valid UUID.',
     })
     async delete(
-       @Param('id', ParseUUIDPipe) id: string,
+        @Param('id', ParseUUIDPipe) id: string,
         @TokenInfo() tokenInfo: { sub: string },
     ): Promise<void> {
         await this.deleteComparison.run(tokenInfo.sub, id);

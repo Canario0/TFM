@@ -170,9 +170,7 @@ export class ProductEntity extends AggregateRoot {
         return totalRating / this.reviews.length;
     }
 
-    public static fromPrimitives(
-        primitives: ProductPrimitives,
-    ): ProductEntity {
+    public static fromPrimitives(primitives: ProductPrimitives): ProductEntity {
         return new ProductEntity(
             primitives.id,
             primitives.name,
