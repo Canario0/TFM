@@ -1,12 +1,13 @@
 import { useState } from "react";
 import reactLogo from "./lib/assets/react.svg";
-import "./App.css";
+import NavBar from "./lib/components/navbar/navbar";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
+      <NavBar />
       <div>
         <a href="https://vite.dev" target="_blank"></a>
         <a href="https://react.dev" target="_blank">
