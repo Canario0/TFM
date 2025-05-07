@@ -1,13 +1,12 @@
+import type { ReactElement } from "react";
 import { useState } from "react";
-import reactLogo from "./lib/assets/react.svg";
-import NavBar from "./lib/components/navbar/navbar";
+import reactLogo from "@lib/assets/react.svg";
 
-function App() {
+function Products(): ReactElement {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <NavBar />
       <div>
         <a href="https://vite.dev" target="_blank"></a>
         <a href="https://react.dev" target="_blank">
@@ -30,4 +29,4 @@ function App() {
   );
 }
 
-export default App;
+export default Products;

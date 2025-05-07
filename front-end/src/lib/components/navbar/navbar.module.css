@@ -14,3 +14,17 @@
   font-weight: 700;
   color: var(--color-dark);
 }
+
+.navbar__brand a {
+  color: unset;
+  cursor: unset;
+  text-decoration: unset;
+  cursor: pointer;
+}
+
+.navbar__brand a:hover {
+  color: unset;
+  cursor: unset;
+  text-decoration: unset;
+  cursor: pointer;
+}
