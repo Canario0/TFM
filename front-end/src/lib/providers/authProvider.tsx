@@ -1,5 +1,11 @@
-import type { User } from "@lib/entities/user";
-import { createContext, useContext, useReducer, useEffect, useCallback } from "react";
+import { UserRole, type User } from "@lib/entities/user";
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback,
+} from "react";
 import { useNavigate } from "react-router";
 import { jwtDecode, type JwtPayload as LibJwtPayload } from "jwt-decode";
 import { API_ENDPOINTS } from "@lib/config/api";
@@ -22,6 +28,7 @@ interface AuthState {
 }
 
 interface AuthContextType extends AuthState {
+  isAdmin: () => boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -121,22 +128,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
   }, []);
 
-  const login = useCallback(async (credentials: LoginCredentials) => {
-    const res = await fetch(API_ENDPOINTS.LOGIN, {
-      method: "POST",
-      body: JSON.stringify(credentials),
-      headers: { "Content-Type": "application/json" },
-    });
-    // TODO: handle error
-    if (!res.ok) throw new Error("Failed to login");
-    const { idToken } = await res.json();
-    localStorage.setItem("authToken", idToken);
-    dispatch({
-      type: "LOGIN",
-      token: idToken,
-      user: getUserFromToken(idToken),
-    });
-  }, [dispatch]);
+  const login = useCallback(
+    async (credentials: LoginCredentials) => {
+      const res = await fetch(API_ENDPOINTS.LOGIN, {
+        method: "POST",
+        body: JSON.stringify(credentials),
+        headers: { "Content-Type": "application/json" },
+      });
+      // TODO: handle error
+      if (!res.ok) throw new Error("Failed to login");
+      const { idToken } = await res.json();
+      localStorage.setItem("authToken", idToken);
+      dispatch({
+        type: "LOGIN",
+        token: idToken,
+        user: getUserFromToken(idToken),
+      });
+    },
+    [dispatch]
+  );
 
   const logout = useCallback(async () => {
     const res = await fetch(API_ENDPOINTS.LOGOUT, {
@@ -150,11 +160,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: "LOGOUT" });
   }, [state.token, navigate, dispatch]);
 
+  const isAdmin = useCallback((): boolean => {
+    return Boolean(state.user && state.user.roles.includes(UserRole.ADMIN));
+  }, [state.user]);
+
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider value={{ ...state, login, logout, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = (): AuthContextType | null => useContext(AuthContext);
