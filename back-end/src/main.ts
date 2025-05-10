@@ -5,7 +5,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, {
+        cors: {
+            origin: process.env.CORS_ORIGIN?.split(',') ?? [],
+            methods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+            credentials: true,
+        },
+    });
     app.enableVersioning({
         type: VersioningType.URI,
         defaultVersion: '1',

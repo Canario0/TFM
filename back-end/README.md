@@ -26,6 +26,9 @@ MONGO_PORT=27017
 # JWT
 JWT_SECRET=your_jwt_secret
 
+# CORS
+CORS_ORIGIN=http://localhost:3000,http://localhost:3001
+
 # Admin User
 # ONLY NEEDED THE FIRST TIME
 ADMIN_USERNAME=admin
