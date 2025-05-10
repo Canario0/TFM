@@ -6,6 +6,7 @@ import { StrictMode } from "react";
 import Products from "@pages/products/products";
 import NavBar from "@lib/components/navbar/navbar";
 import { AuthProvider } from "@lib/providers/authProvider";
+import Categories from "@pages/categories/categories";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -14,7 +15,8 @@ createRoot(document.getElementById("root")!).render(
         <AuthProvider>
           <Routes>
             <Route element={<NavBar />}>
-              <Route path="/" element={<Products />} />
+              <Route path="/" element={<Categories />} />
+              <Route path="/productos" element={<Products />} />
             </Route>
           </Routes>
         </AuthProvider>

@@ -1,0 +1,21 @@
+
+.card {
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.content__icon {
+  font-size: 3rem;
+}
+
+.content__name {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
