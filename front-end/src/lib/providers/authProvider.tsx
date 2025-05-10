@@ -1,7 +1,8 @@
 import type { User } from "@lib/entities/user";
-import { createContext, useContext, useReducer, useEffect } from "react";
+import { createContext, useContext, useReducer, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { jwtDecode, type JwtPayload as LibJwtPayload } from "jwt-decode";
+import { API_ENDPOINTS } from "@lib/config/api";
 
 type JwtPayload = LibJwtPayload & {
   username: string;
@@ -18,19 +19,20 @@ interface AuthState {
   token: string | null;
   user: User | null;
   loading: boolean;
+}
+
+interface AuthContextType extends AuthState {
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthState | null>(null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 const initialState: AuthState = {
   isAuthenticated: false,
   token: null,
   user: null,
   loading: true,
-  login: async () => {},
-  logout: async () => {},
 };
 
 interface LoginAction {
@@ -119,8 +121,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
   }, []);
 
-  const login = async (credentials: LoginCredentials) => {
-    const res = await fetch("/v1/users/login", {
+  const login = useCallback(async (credentials: LoginCredentials) => {
+    const res = await fetch(API_ENDPOINTS.LOGIN, {
       method: "POST",
       body: JSON.stringify(credentials),
       headers: { "Content-Type": "application/json" },
@@ -134,10 +136,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       token: idToken,
       user: getUserFromToken(idToken),
     });
-  };
+  }, [dispatch]);
 
-  const logout = async () => {
-    const res = await fetch("/v1/users/logout", {
+  const logout = useCallback(async () => {
+    const res = await fetch(API_ENDPOINTS.LOGOUT, {
       method: "POST",
       headers: { Authorization: `Bearer ${state.token}` },
     });
@@ -146,7 +148,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("authToken");
     navigate("/");
     dispatch({ type: "LOGOUT" });
-  };
+  }, [state.token, navigate, dispatch]);
 
   return (
     <AuthContext.Provider value={{ ...state, login, logout }}>
