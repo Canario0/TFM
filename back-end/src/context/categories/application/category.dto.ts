@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CategoryEntity } from '../domain/entities/category.entity';
-import { IsEnum, IsString, Length } from 'class-validator';
+import { IsArray, IsEnum, IsString, Length, ValidateNested } from 'class-validator';
 import { Icons } from 'src/context/shared/domain/types';
 import { SubCategory } from '../domain/entities/subCategory.entity';
+import { Type } from 'class-transformer';
 
 export class SubCategoryDto {
     @ApiProperty()
@@ -51,6 +52,9 @@ export class CategoryDto {
     icon: Icons;
 
     @ApiProperty({ type: [SubCategoryDto] })
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => SubCategoryDto)
     subCategories: SubCategoryDto[];
 
     constructor(category: CategoryEntity) {

@@ -35,7 +35,7 @@ class ProductMetadataDto {
     value: string;
 }
 
-class ProductSubCategoryDto {
+export class ProductSubCategoryDto {
     @ApiProperty()
     @IsString()
     @Length(3, 100, {
