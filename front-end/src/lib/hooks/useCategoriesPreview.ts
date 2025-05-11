@@ -1,6 +1,7 @@
 import { API_ENDPOINTS } from "@lib/config/api";
 import type { CategoryPreview } from "@lib/entities/categoryPreview";
 import { InternalError } from "@lib/entities/errors";
+import { containsCode } from "@lib/utils";
 import { useEffect, useReducer } from "react";
 
 interface CategoriesState {
@@ -70,11 +71,7 @@ function useCategoriesPreview(): [CategoriesState] {
         const data = await res.json();
         dispatch({ type: "SUCCESS", categories: data });
       } catch (error: unknown) {
-        if (
-          error instanceof Error &&
-          "code" in error &&
-          error.code === InternalError.code
-        ) {
+        if (containsCode(error, InternalError.code)) {
           dispatch({ type: "ERROR", error: error.message });
         } else {
           dispatch({ type: "ERROR", error: "Error desconocido" });

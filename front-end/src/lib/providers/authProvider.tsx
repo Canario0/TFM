@@ -9,6 +9,12 @@ import {
 import { useNavigate } from "react-router";
 import { jwtDecode, type JwtPayload as LibJwtPayload } from "jwt-decode";
 import { API_ENDPOINTS } from "@lib/config/api";
+import { containsCode } from "@lib/utils";
+import {
+  CustomError,
+  InternalError,
+  UnauthorizedError,
+} from "@lib/entities/errors";
 
 type JwtPayload = LibJwtPayload & {
   username: string;
@@ -30,10 +36,9 @@ interface AuthState {
 interface AuthContextType extends AuthState {
   isAdmin: () => boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
+  register: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
 }
-
-const AuthContext = createContext<AuthContextType | null>(null);
 
 const initialState: AuthState = {
   isAuthenticated: false,
@@ -41,6 +46,14 @@ const initialState: AuthState = {
   user: null,
   loading: true,
 };
+
+const AuthContext = createContext<AuthContextType>({
+  ...initialState,
+  isAdmin: () => false,
+  login: async () => {},
+  register: async () => {},
+  logout: async () => {},
+} as AuthContextType);
 
 interface LoginAction {
   type: "LOGIN";
@@ -105,6 +118,16 @@ function getUserFromToken(token: string): User {
   } as User;
 }
 
+function handleError(error: unknown) {
+  if (containsCode(error, UnauthorizedError.code)) {
+    throw new CustomError(error.code, error.message);
+  }
+  if (containsCode(error, InternalError.code)) {
+    throw new CustomError(error.code, error.message);
+  }
+  throw new Error("Failed to login");
+}
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
   const navigate = useNavigate();
@@ -135,8 +158,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         body: JSON.stringify(credentials),
         headers: { "Content-Type": "application/json" },
       });
-      // TODO: handle error
-      if (!res.ok) throw new Error("Failed to login");
+      if (!res.ok) {
+        const error = await res.json();
+        handleError(error);
+      }
       const { idToken } = await res.json();
       localStorage.setItem("authToken", idToken);
       dispatch({
@@ -153,22 +178,39 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       method: "POST",
       headers: { Authorization: `Bearer ${state.token}` },
     });
-    // TODO: handle error
-    if (!res.ok) throw new Error("Failed to logout");
+    if (!res.ok) {
+      const error = await res.json();
+      handleError(error);
+    }
     localStorage.removeItem("authToken");
     navigate("/");
     dispatch({ type: "LOGOUT" });
   }, [state.token, navigate, dispatch]);
+
+  const register = useCallback(async (credentials: LoginCredentials) => {
+    const res = await fetch(API_ENDPOINTS.REGISTER, {
+      method: "POST",
+      body: JSON.stringify(credentials),
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!res.ok) {
+      const error = await res.json();
+      handleError(error);
+    }
+    dispatch({ type: "LOADING" });
+  }, []);
 
   const isAdmin = useCallback((): boolean => {
     return Boolean(state.user && state.user.roles.includes(UserRole.ADMIN));
   }, [state.user]);
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, isAdmin }}>
+    <AuthContext.Provider
+      value={{ ...state, login, logout, isAdmin, register }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = (): AuthContextType | null => useContext(AuthContext);
+export const useAuth = (): AuthContextType => useContext(AuthContext);

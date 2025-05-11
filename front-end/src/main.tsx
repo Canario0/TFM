@@ -7,19 +7,25 @@ import Products from "@pages/products/products";
 import NavBar from "@lib/components/navbar/navbar";
 import { AuthProvider } from "@lib/providers/authProvider";
 import Categories from "@pages/categories/categories";
+import { SnackbarProvider } from "notistack";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <StyledEngineProvider injectFirst>
-        <AuthProvider>
-          <Routes>
-            <Route element={<NavBar />}>
-              <Route path="/" element={<Categories />} />
-              <Route path="/productos" element={<Products />} />
-            </Route>
-          </Routes>
-        </AuthProvider>
+        <SnackbarProvider maxSnack={3} anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}>
+          <AuthProvider>
+            <Routes>
+              <Route element={<NavBar />}>
+                <Route path="/" element={<Categories />} />
+                <Route path="/productos" element={<Products />} />
+              </Route>
+            </Routes>
+          </AuthProvider>
+        </SnackbarProvider>
       </StyledEngineProvider>
     </BrowserRouter>
   </StrictMode>
