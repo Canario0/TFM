@@ -1,7 +1,6 @@
 import { UserRole, type User } from "@lib/entities/user";
 import {
   createContext,
-  useContext,
   useReducer,
   useEffect,
   useCallback,
@@ -33,7 +32,7 @@ interface AuthState {
   loading: boolean;
 }
 
-interface AuthContextType extends AuthState {
+export interface AuthContextType extends AuthState {
   isAdmin: () => boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (credentials: LoginCredentials) => Promise<void>;
@@ -47,7 +46,7 @@ const initialState: AuthState = {
   loading: true,
 };
 
-const AuthContext = createContext<AuthContextType>({
+export const AuthContext = createContext<AuthContextType>({
   ...initialState,
   isAdmin: () => false,
   login: async () => {},
@@ -213,4 +212,3 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useAuth = (): AuthContextType => useContext(AuthContext);

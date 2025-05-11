@@ -2,10 +2,10 @@ import { Person } from "@mui/icons-material";
 import { Avatar, ButtonBase, Menu, MenuItem } from "@mui/material";
 import UserPasswordModal from "../userPasswordModal/userPasswordModal";
 import { useState } from "react";
-import { useAuth } from "@lib/providers/authProvider";
 import { useSnackbar } from "notistack";
 import { InternalError, UnauthorizedError } from "@lib/entities/errors";
 import { containsCode } from "@lib/utils";
+import { useAuth } from "@lib/hooks/useAuth";
 
 function UserMenu() {
   const { enqueueSnackbar } = useSnackbar();
