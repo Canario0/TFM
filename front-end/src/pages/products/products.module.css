@@ -1,0 +1,23 @@
+@import "../../index.css";
+
+.products {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  .products {
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+  }
+
+  .products > * {
+    width: 100%;
+  }
+}

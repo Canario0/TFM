@@ -5,5 +5,6 @@ export const API_ENDPOINTS = {
   LOGIN: `${API_BASE_URL}/v1/users/login`,
   LOGOUT: `${API_BASE_URL}/v1/users/logout`,
   CATEGORIES: `${API_BASE_URL}/v1/categories`,
+  PRODUCTS: `${API_BASE_URL}/v1/products`,
   REGISTER: `${API_BASE_URL}/v1/users/register`,
 } as const;

@@ -1,10 +1,5 @@
 import { UserRole, type User } from "@lib/entities/user";
-import {
-  createContext,
-  useReducer,
-  useEffect,
-  useCallback,
-} from "react";
+import { createContext, useReducer, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { jwtDecode, type JwtPayload as LibJwtPayload } from "jwt-decode";
 import { API_ENDPOINTS } from "@lib/config/api";
@@ -160,6 +155,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!res.ok) {
         const error = await res.json();
         handleError(error);
+        return;
       }
       const { idToken } = await res.json();
       localStorage.setItem("authToken", idToken);
@@ -211,4 +207,3 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
-

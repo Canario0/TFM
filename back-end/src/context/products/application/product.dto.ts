@@ -21,14 +21,14 @@ import { Type } from 'class-transformer';
 
 class ProductMetadataDto {
     @ApiProperty()
-    @Length(3, 100, {
-        message: 'Key must be between 3 and 100 characters',
+    @Length(1, 100, {
+        message: 'Key must be between 1 and 100 characters',
     })
     @IsString()
     key: string;
 
     @ApiProperty()
-    @Length(3, 100, {
+    @Length(1, 100, {
         message: 'Value must be between 3 and 100 characters',
     })
     @IsString()
@@ -145,7 +145,7 @@ export class ProductDto {
 
     @ApiProperty()
     @IsString()
-    @Length(3, 100, {
+    @Length(2, 100, {
         message: 'Brand must be between 3 and 100 characters',
     })
     brand: string;
