@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import styles from "./categories.module.css";
-import useCategoriesPreview from "@lib/hooks/useCategoriesPreview";
+import useCategoriesSummary from "@lib/hooks/useCategoriesSummary";
 import CategoryCard from "@lib/components/categoryCard/categoryCard";
 import { useNavigate } from "react-router";
 import FloatingActionButton from "@lib/components/floatingActionButton/floatingActionButton";
@@ -10,7 +10,7 @@ import { useAuth } from "@lib/hooks/useAuth";
 
 function Categories(): ReactElement {
   const auth = useAuth();
-  const [state] = useCategoriesPreview();
+  const [state] = useCategoriesSummary();
   const navigate = useNavigate();
   return (
     <>

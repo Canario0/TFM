@@ -1,11 +1,11 @@
 import { API_ENDPOINTS } from "@lib/config/api";
-import type { CategoryPreview } from "@lib/entities/categoryPreview";
+import type { CategorySummary } from "@lib/entities/categorySummary";
 import { InternalError } from "@lib/entities/errors";
 import { containsCode } from "@lib/utils";
 import { useEffect, useReducer } from "react";
 
 interface CategoriesState {
-  categories: CategoryPreview[];
+  categories: CategorySummary[];
   loading: boolean;
   error: string | null;
 }
@@ -18,7 +18,7 @@ const initialState: CategoriesState = {
 
 interface SuccessAction {
   type: "SUCCESS";
-  categories: CategoryPreview[];
+  categories: CategorySummary[];
 }
 
 interface LoadingAction {
@@ -58,7 +58,7 @@ function categoriesReducer(state: CategoriesState, action: CategoriesAction) {
   }
 }
 
-function useCategoriesPreview(): [CategoriesState] {
+function useCategoriesSummary(): [CategoriesState] {
   const [state, dispatch] = useReducer(categoriesReducer, initialState);
   useEffect(() => {
     const abortController = new AbortController();
@@ -84,4 +84,4 @@ function useCategoriesPreview(): [CategoriesState] {
   return [state];
 }
 
-export default useCategoriesPreview;
+export default useCategoriesSummary;
