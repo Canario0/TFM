@@ -62,7 +62,7 @@ export default function UserPasswordModal({
     event.preventDefault();
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLFormElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
       ref.current?.submitForm();
@@ -88,7 +88,7 @@ export default function UserPasswordModal({
                 label="Nombre de usuario"
                 error={touched.username && Boolean(errors.username)}
                 helperText={touched.username && errors.username}
-                onKeyDown={handleKeyPress}
+                onKeyDown={handleKeyDown}
               />
               <Field
                 as={TextField}
@@ -99,7 +99,7 @@ export default function UserPasswordModal({
                 type={showPassword ? "text" : "password"}
                 error={touched.password && Boolean(errors.password)}
                 helperText={touched.password && errors.password}
-                onKeyDown={handleKeyPress}
+                onKeyDown={handleKeyDown}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">

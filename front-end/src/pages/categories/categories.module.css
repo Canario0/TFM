@@ -9,6 +9,19 @@
   flex-wrap: wrap;
 }
 
+.hero {
+  background-image: url("hero.webp");
+  background-color: var(--color-cream);
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  max-height: 270px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 /* MOBILE */
 @media (max-width: 480px) {
   .categories {
