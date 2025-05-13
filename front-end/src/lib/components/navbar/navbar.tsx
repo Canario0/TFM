@@ -1,8 +1,11 @@
 import styles from "./navbar.module.css";
 import { Link, Outlet } from "react-router";
 import UserMenu from "../userMenu/userMenu";
+import { useAuth } from "@lib/hooks/useAuth";
+import { CircularProgress } from "@mui/material";
 
 function NavBar() {
+  const auth = useAuth();
   return (
     <>
       <nav
@@ -15,7 +18,7 @@ function NavBar() {
         </div>
         <UserMenu />
       </nav>
-      <Outlet />
+      {auth.loading ? <CircularProgress /> : <Outlet />}
     </>
   );
 }
