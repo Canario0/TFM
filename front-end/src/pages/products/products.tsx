@@ -11,7 +11,7 @@ import useProductsSummary from "@lib/hooks/useProductsSummary";
 import ProductCard from "@lib/components/productCard/productCard";
 import styles from "./products.module.css";
 import ProductSelectionButton from "@lib/components/productSelectionButton/productSelectionButton";
-import SearchBar from "@lib/components/searchBar/SearchBar";
+import SearchBar from "@lib/components/searchBar/searchBar";
 
 function Products(): ReactElement {
   const [searchParams] = useSearchParams();
@@ -89,9 +89,7 @@ function Products(): ReactElement {
       </BodyBox>
       {selectedProducts.size > 0 && (
         <ProductSelectionButton
-          selectedProducts={products.filter((p) =>
-            selectedProducts.has(p.id)
-          )}
+          selectedProducts={products.filter((p) => selectedProducts.has(p.id))}
           onClick={() => {
             console.log("compare");
           }}

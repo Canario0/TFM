@@ -7,7 +7,7 @@ import FloatingActionButton from "@lib/components/floatingActionButton/floatingA
 import { Add } from "@mui/icons-material";
 import BodyBox from "@lib/components/bodyBox/bodyBox";
 import { useAuth } from "@lib/hooks/useAuth";
-import SearchBar from "@lib/components/searchBar/SearchBar";
+import SearchBar from "@lib/components/searchBar/searchBar";
 
 function Categories(): ReactElement {
   const auth = useAuth();
