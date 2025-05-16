@@ -1,31 +1,14 @@
-import { Card, CardContent, IconButton, Rating } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import Icon from "../icon/icon";
 import styles from "./productCard.module.css";
 import type { Icons } from "@lib/entities/icons";
-import { Add, Remove, Star } from "@mui/icons-material";
 
 interface ProductCardProps {
-  id: string;
   name: string;
   icon: Icons;
-  rating: number;
-  action: "add" | "remove";
-  onClick: () => void;
 }
 
-const translateRating = (rating: number): number => {
-  return Math.round(rating / 2);
-};
-
-function ProductCard({
-  id,
-  name,
-  icon,
-  rating,
-  action,
-  onClick,
-}: ProductCardProps) {
-  const translatedRating = translateRating(rating);
+function ProductCard({ name, icon }: ProductCardProps) {
   return (
     <Card className={styles.card}>
       <CardContent className={styles.content}>
@@ -33,25 +16,7 @@ function ProductCard({
           <Icon icon={icon} className={styles.content__icon} />
         </div>
         <div>
-          <div className={styles.content__name}>
-            <span>{name}</span>
-            <IconButton
-              onClick={onClick}
-              className={styles.content__name__icon}
-            >
-              {action === "add" ? <Add /> : <Remove />}
-            </IconButton>
-          </div>
-          <div>
-            <Rating
-              name="text-feedback"
-              value={translatedRating}
-              readOnly
-              precision={0.5}
-              emptyIcon={<Star style={{ opacity: 0.55 }} fontSize="inherit" />}
-              size="small"
-            />
-          </div>
+          <span>{name}</span>
         </div>
       </CardContent>
     </Card>

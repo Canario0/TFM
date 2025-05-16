@@ -1,0 +1,25 @@
+.subCategoryHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.metadataContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.metadataContainer:nth-child(odd) {
+  background-color: var(--color-grey);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+}

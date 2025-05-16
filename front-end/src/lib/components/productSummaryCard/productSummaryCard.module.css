@@ -1,0 +1,40 @@
+.card {
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.content__icon {
+  font-size: 3rem;
+}
+
+.content__name {
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.content__name__icon {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.content__name__icon:hover {
+  background-color: var(--color-blue-hover);
+}
+
+.content__name__icon > svg {
+  font-size: 1rem;
+}

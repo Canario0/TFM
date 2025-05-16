@@ -6,15 +6,16 @@ import {
   type ReactElement,
 } from "react";
 import BodyBox from "@lib/components/bodyBox/bodyBox";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import useProductsSummary from "@lib/hooks/useProductsSummary";
-import ProductCard from "@lib/components/productCard/productCard";
+import ProductSummaryCard from "@lib/components/productSummaryCard/productSummaryCard";
 import styles from "./products.module.css";
 import ProductSelectionButton from "@lib/components/productSelectionButton/productSelectionButton";
 import SearchBar from "@lib/components/searchBar/searchBar";
 
 function Products(): ReactElement {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const category = searchParams.get("categoria");
   const [state] = useProductsSummary();
   const products = useMemo(() => {
@@ -78,7 +79,7 @@ function Products(): ReactElement {
       <BodyBox className={styles.products}>
         {filteredProducts.map((product) => (
           <div key={product.id} className={styles.productItem}>
-            <ProductCard
+            <ProductSummaryCard
               key={product.id}
               {...product}
               action={selectedProducts.has(product.id) ? "remove" : "add"}
@@ -91,7 +92,11 @@ function Products(): ReactElement {
         <ProductSelectionButton
           selectedProducts={products.filter((p) => selectedProducts.has(p.id))}
           onClick={() => {
-            console.log("compare");
+            navigate(
+              `/comparativas/new?${Array.from(selectedProducts)
+                .map((id) => `id=${id}`)
+                .join("&")}`
+            );
           }}
         />
       )}

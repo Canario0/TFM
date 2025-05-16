@@ -18,7 +18,9 @@ function NavBar() {
         </div>
         <UserMenu />
       </nav>
-      {auth.loading ? <CircularProgress /> : <Outlet />}
+      <div className={styles.content}>
+        {auth.loading ? <CircularProgress /> : <Outlet />}
+      </div>
     </>
   );
 }

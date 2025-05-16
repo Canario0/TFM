@@ -1,0 +1,35 @@
+.product-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  overflow-x: auto;
+  background-color: var(--color-grey);
+  min-width: 100vw;
+}
+
+
+.metadataContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+
+@media (min-width: 480px) {
+  .overflowing {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-container {
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+}

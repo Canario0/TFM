@@ -11,3 +11,7 @@ export function containsCode(
       error.code === code
   );
 }
+
+export function translateRating(rating: number): number {
+  return Math.round(rating / 2);
+}
