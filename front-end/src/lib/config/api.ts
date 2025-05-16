@@ -8,5 +8,6 @@ export const API_ENDPOINTS = {
   PRODUCTS: `${API_BASE_URL}/v1/products`,
   PRODUCT: `${API_BASE_URL}/v1/products/:id`,
   REGISTER: `${API_BASE_URL}/v1/users/register`,
+  COMPARISONS: `${API_BASE_URL}/v1/comparisons`,
   COMPARISON: `${API_BASE_URL}/v1/comparisons/:id`,
 } as const;

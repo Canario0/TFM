@@ -113,7 +113,11 @@ function useComparison(): [
     removeProduct: (product: Product) => void;
     updateName: (name: string) => void;
     updateDescription: (description: string) => void;
-    save: (token: string) => void;
+    save: (
+      token: string,
+      name: string,
+      description?: string
+    ) => Promise<string>;
     load: (id?: string, productIds?: string[], token?: string) => void;
   }
 ] {
@@ -224,7 +228,38 @@ function useComparison(): [
     [state.comparison, dispatch]
   );
 
-  const save = useCallback((token: string) => {}, [state]);
+  const save = useCallback(
+    async (token: string, name: string, description?: string) => {
+      const res = await fetch(API_ENDPOINTS.COMPARISONS, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          description,
+          productIds: state.comparison?.products.map((p) => p.id),
+        }),
+      });
+      if (!res.ok) {
+        const backError = await res.json();
+        const error = handleError(backError);
+        throw error;
+      }
+      const comparison = await res.json();
+      const products = await fetchProducts(comparison.productIds);
+      dispatch({
+        type: "SUCCESS",
+        comparison: {
+          ...comparison,
+          products: products,
+        },
+      });
+      return comparison.id;
+    },
+    [state.comparison, dispatch]
+  );
 
   return [
     state,

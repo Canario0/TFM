@@ -18,6 +18,7 @@ import BodyBox from "@lib/components/bodyBox/bodyBox";
 import { BasicMetadata } from "../../lib/components/basicMetadata/basicMetadata";
 import { SubCategoryMetadata } from "../../lib/components/subCategoryMetadata/subCategoryMetadata";
 import type { Icons } from "@lib/entities/icons";
+import SaveCategoryModal from "@lib/components/saveCategoryModal/saveCategoryModal";
 
 type GroupedSubCategories = Map<
   string,
@@ -33,8 +34,9 @@ function Comparison(): ReactElement {
   const { id } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [state, { load }] = useComparison();
+  const [state, { load, save }] = useComparison();
   const [isOverflowing, setIsOverflowing] = useState(false);
+  const [openSaveCategoryModal, setOpenSaveCategoryModal] = useState(false);
 
   const productIds = useMemo(() => {
     return state.comparison?.products.map((product) => product.id) ?? [];
@@ -104,6 +106,26 @@ function Comparison(): ReactElement {
     [setIsOverflowing]
   );
 
+  const handleSaveCategorySubmit = useCallback(
+    async ({ name, description }: { name: string; description?: string }) => {
+      try {
+        const comparisonId = await save(auth.token!, name, description);
+        navigate(`/comparativas/${comparisonId}`);
+      } catch (error) {
+        if (error instanceof Error) {
+          enqueueSnackbar(error.message, {
+            variant: "error",
+          });
+        } else {
+          enqueueSnackbar("Error desconocido", {
+            variant: "error",
+          });
+        }
+      }
+    },
+    [save, auth.token, enqueueSnackbar]
+  );
+
   if (state.loading) {
     return (
       <Box
@@ -151,7 +173,21 @@ function Comparison(): ReactElement {
           )
         )}
       {auth.isAuthenticated && !id && (
-        <FloatingActionButton icon={<Save />} onClick={() => {}} />
+        <>
+          <FloatingActionButton
+            icon={<Save />}
+            onClick={() => {
+              setOpenSaveCategoryModal(true);
+            }}
+          />
+          <SaveCategoryModal
+            open={openSaveCategoryModal}
+            onClose={() => setOpenSaveCategoryModal(false)}
+            onSubmit={handleSaveCategorySubmit}
+            submitButtonLabel="Guardar"
+            loading={false}
+          />
+        </>
       )}
     </>
   );
