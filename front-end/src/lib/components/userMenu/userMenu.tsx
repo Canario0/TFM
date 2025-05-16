@@ -6,6 +6,7 @@ import { useSnackbar } from "notistack";
 import { InternalError, UnauthorizedError } from "@lib/entities/errors";
 import { containsCode } from "@lib/utils";
 import { useAuth } from "@lib/hooks/useAuth";
+import { useNavigate } from "react-router";
 
 function UserMenu() {
   const { enqueueSnackbar } = useSnackbar();
@@ -14,10 +15,18 @@ function UserMenu() {
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   let menuItems: { label: string; onClick: () => void }[] = [];
   if (auth?.user) {
     menuItems = [
+      {
+        label: "Comparativas",
+        onClick: () => {
+          navigate("/comparativas");
+          setAnchorEl(null);
+        },
+      },
       {
         label: "Logout",
         onClick: () => {

@@ -10,6 +10,7 @@ import Categories from "@pages/categories/categories";
 import { SnackbarProvider } from "notistack";
 import Comparison from "@pages/comparison/comparison";
 import { RequireLogin } from "@lib/guards/requireLogin";
+import Comparisons from "@pages/comparisons/comparisons";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -27,6 +28,7 @@ createRoot(document.getElementById("root")!).render(
               <Route element={<NavBar />}>
                 <Route path="/" element={<Categories />} />
                 <Route path="/productos" element={<Products />} />
+                <Route path="/comparativas" element={<Comparisons />} />
                 <Route path="/comparativas/new" element={<Comparison />} />
                 <Route
                   path="/comparativas/:id"

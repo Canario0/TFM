@@ -72,6 +72,9 @@ function Comparison(): ReactElement {
       try {
         if (!id) {
           const ids = searchParams.getAll("id");
+          if (!ids || ids.length === 0) {
+            navigate("/");
+          }
           await load(undefined, ids);
         } else {
           await load(id, undefined, auth.token!);
