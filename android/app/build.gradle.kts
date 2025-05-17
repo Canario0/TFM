@@ -6,6 +6,10 @@ android {
     namespace = "com.example.comparathor"
     compileSdk = 35
 
+    buildFeatures {
+       buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.example.comparathor"
         minSdk = 24
@@ -23,6 +27,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "API_URL", "\"http://localhost:3000/\"")
         }
         release {
             isMinifyEnabled = true
@@ -30,6 +35,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("string", "API_URL", "\"http://localhost:3000/\"")
         }
 
     }
@@ -46,6 +52,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.material.v1120)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
