@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { SharedModule } from 'src/context/shared/shared.module';
 import { UsersController } from './controllers/users.controller';
 import { UsersModule } from 'src/context/users/users.module';
@@ -13,6 +13,7 @@ import { ProductsModule } from 'src/context/products/products.module';
 import { ProductsController } from './controllers/products.controller';
 import { ComparisonsModule } from 'src/context/comparisons/comparisons.module';
 import { ComparisonsController } from './controllers/comparisons.controller';
+import LogsMiddleware from './logger.middleware';
 
 @Module({
     imports: [
@@ -37,6 +38,11 @@ import { ComparisonsController } from './controllers/comparisons.controller';
             provide: APP_FILTER,
             useClass: ErrorHandler,
         },
+        LogsMiddleware,
     ],
 })
-export class AppModule {}
+export class AppModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(LogsMiddleware).forRoutes('*');
+    }
+}
