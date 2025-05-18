@@ -27,7 +27,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "API_URL", "\"http://localhost:3000/\"")
+            buildConfigField("String", "API_URL", "\"http://10.0.2.2:3000/\"")
         }
         release {
             isMinifyEnabled = true
@@ -35,7 +35,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("string", "API_URL", "\"http://localhost:3000/\"")
+            buildConfigField("string", "API_URL", "\"http://10.0.2.2:3000/\"")
         }
 
     }

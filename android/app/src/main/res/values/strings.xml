@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Comparathor</string>
+    <string name="categories_page_title">Categorias</string>
+    <string name="account">Acciones de usuario</string>
+    <string name="content_description_account">Acciones de usuario</string>
+    <string name="category_icon_descriptor">Icono de la categoría</string>
 </resources>

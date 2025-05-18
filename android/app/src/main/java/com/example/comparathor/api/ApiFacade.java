@@ -3,9 +3,13 @@ package com.example.comparathor.api;
 import android.util.Log;
 
 import com.example.comparathor.BuildConfig;
+import com.example.comparathor.entities.CategoryPreview;
 import com.example.comparathor.retrofit.services.AuthService;
+import com.example.comparathor.retrofit.services.CategoriesService;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -46,6 +50,21 @@ public class ApiFacade {
         } catch (IOException e) {
             Log.w(AuthService.class.getName(), e.getMessage());
         }
+    }
+
+    public List<CategoryPreview> getAllCategories() {
+        CategoriesService service = retrofit.create(CategoriesService.class);
+        try {
+            List<CategoryPreview> result = service.getAll().execute().body();
+            if (result == null) {
+                return new ArrayList<>();
+            }
+            return result;
+        } catch (IOException e) {
+            Log.w(AuthService.class.getName(), e.getMessage());
+            return null;
+        }
+
     }
 
 
