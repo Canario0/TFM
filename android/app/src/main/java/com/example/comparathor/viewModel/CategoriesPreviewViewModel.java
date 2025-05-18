@@ -30,7 +30,12 @@ public class CategoriesPreviewViewModel extends AndroidViewModel {
         return categories;
     }
 
-    public void loadCategories() {
+
+    public interface Callback {
+        void onComplete(boolean success);
+    }
+
+    public void loadCategories(Callback callback) {
         executorService.execute(
                 new Runnable() {
                     @Override
@@ -38,9 +43,11 @@ public class CategoriesPreviewViewModel extends AndroidViewModel {
                         List<CategoryPreview> remoteCategories = api.getAllCategories();
                         categories.postValue(remoteCategories);
                         Log.i(CategoriesPreviewViewModel.class.getName(), "Response: " + remoteCategories);
+                        if (callback != null) {
+                            callback.onComplete(true);
+                        }
                     }
                 }
         );
     }
-
 }

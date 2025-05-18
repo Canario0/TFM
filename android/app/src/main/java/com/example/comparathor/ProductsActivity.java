@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,10 +20,11 @@ import com.example.comparathor.adapters.CategoryPreviewAdapter;
 import com.example.comparathor.entities.CategoryPreview;
 import com.example.comparathor.utils.IntentConstants;
 import com.example.comparathor.viewModel.CategoriesPreviewViewModel;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class ProductsActivity extends AppCompatActivity {
 
     private CategoriesPreviewViewModel viewModel = null;
     private SwipeRefreshLayout swipeRefresh = null;
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_products);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -47,6 +49,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.scrollToPosition(0);
         recyclerView.setAdapter(adapter);
+
+        MaterialToolbar toolbar = this.findViewById(R.id.topAppBar);
+        toolbar.setNavigationOnClickListener(
+                v -> {
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+        );
 
         this.swipeRefresh = this.findViewById(R.id.swipeRefresh);
         this.swipeRefresh.setOnRefreshListener(

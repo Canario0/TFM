@@ -18,9 +18,15 @@ import java.util.List;
 public class CategoryPreviewAdapter extends RecyclerView.Adapter<CategoryPreviewAdapter.ViewHolder> {
 
     private List<CategoryPreview> categories = new ArrayList<>();
+    private CategoryListener listener;
+
+    public CategoryPreviewAdapter(CategoryListener listener) {
+        this.listener = listener;
+    }
 
     public void setCategories(List<CategoryPreview> categories) {
         this.categories = categories;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -33,7 +39,7 @@ public class CategoryPreviewAdapter extends RecyclerView.Adapter<CategoryPreview
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CategoryPreview category = this.categories.get(position);
-        holder.bind(category);
+        holder.bind(category, this.listener);
     }
 
     @Override
@@ -52,10 +58,21 @@ public class CategoryPreviewAdapter extends RecyclerView.Adapter<CategoryPreview
             this.nameTextView = (TextView) itemView.findViewById(R.id.category_name);
         }
 
-        public void bind(CategoryPreview category) {
+        public void bind(CategoryPreview category, CategoryListener listener) {
             this.iconView.setImageResource(category.getResourceIcon());
             this.nameTextView.setText(category.getName());
+            this.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClick(category);
+                }
+            });
         }
 
     }
+
+    public interface CategoryListener {
+        void onClick(CategoryPreview category);
+    }
+
 }
