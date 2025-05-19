@@ -6,4 +6,5 @@
     <string name="category_icon_descriptor">Icono de la categoría</string>
     <string name="products_page_title">Productos</string>
     <string name="product_icon_descriptor">Icono del producto</string>
+    <string name="select_button_descriptor">Select product to compare</string>
 </resources>

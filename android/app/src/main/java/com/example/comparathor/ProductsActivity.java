@@ -21,8 +21,10 @@ import com.example.comparathor.utils.IntentConstants;
 import com.example.comparathor.viewModel.ProductSummaryViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class ProductsActivity extends AppCompatActivity {
 
@@ -31,6 +33,8 @@ public class ProductsActivity extends AppCompatActivity {
 
     private ProductSummaryViewModel.Callback refreshCallBack = null;
     private String category = null;
+
+    private Set<String> selectedProducts = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,12 @@ public class ProductsActivity extends AppCompatActivity {
             return insets;
         });
 
-        ProductSummaryAdapter adapter = new ProductSummaryAdapter(this::onProductClick);
+        ProductSummaryAdapter adapter = new ProductSummaryAdapter(new ProductSummaryAdapter.ProductListener() {
+            @Override
+            public void onSelected(ProductSummary product) {
+                onProductSelected(product);
+            }
+        });
         RecyclerView.LayoutManager layoutManager =
                 new LinearLayoutManager(this);
         RecyclerView recyclerView = findViewById(R.id.products_recyclerview);
@@ -88,11 +97,8 @@ public class ProductsActivity extends AppCompatActivity {
         this.viewModel.loadProducts(this.category, this.refreshCallBack);
     }
 
-    public void onProductClick(ProductSummary product) {
+    public void onProductSelected(ProductSummary product) {
         Log.i(this.getLocalClassName(), "Item: " + product);
-        Intent intent = new Intent(this, ProductsActivity.class);
-        intent.putExtra(IntentConstants.CATEGORY_ID, product.getId());
-        intent.putExtra(IntentConstants.CATEGORY_NAME, product.getName());
-        startActivity(intent);
+        this.selectedProducts.add(product.getId());
     }
 }

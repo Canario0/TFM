@@ -1,10 +1,14 @@
 package com.example.comparathor.adapters;
 
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,19 +56,26 @@ public class ProductSummaryAdapter extends RecyclerView.Adapter<ProductSummaryAd
         private final ImageView iconView;
         private final TextView nameTextView;
 
+        private final RatingBar ratingBar;
+
+        private final ImageButton imageButton;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.iconView = (ImageView) itemView.findViewById(R.id.product_icon);
             this.nameTextView = (TextView) itemView.findViewById(R.id.product_name);
+            this.ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
+            this.imageButton = (ImageButton) itemView.findViewById(R.id.select_button);
         }
 
         public void bind(ProductSummary product, ProductListener listener) {
             this.iconView.setImageResource(product.getResourceIcon());
             this.nameTextView.setText(product.getName());
-            this.itemView.setOnClickListener(new View.OnClickListener() {
+            this.ratingBar.setRating(product.getRating());
+            this.imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onClick(product);
+                    listener.onSelected(product);
                 }
             });
         }
@@ -72,7 +83,8 @@ public class ProductSummaryAdapter extends RecyclerView.Adapter<ProductSummaryAd
     }
 
     public interface ProductListener {
-        void onClick(ProductSummary product);
+
+        void onSelected(ProductSummary product);
     }
 
 }

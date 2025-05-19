@@ -5,8 +5,8 @@ public class ProductSummary {
     private String name;
     private Icons icon;
     private String category;
-    private Double rating;
-    private Double price;
+    private Float rating;
+    private Float price;
     private String maker;
     private String brand;
     private String model;
@@ -17,8 +17,8 @@ public class ProductSummary {
             String name,
             Icons icon,
             String category,
-            Double rating,
-            Double price,
+            Float rating,
+            Float price,
             String maker,
             String brand,
             String model,
@@ -71,19 +71,19 @@ public class ProductSummary {
         this.category = category;
     }
 
-    public Double getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 
-    public Double getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
@@ -117,5 +117,21 @@ public class ProductSummary {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductSummary{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", icon=" + icon +
+                ", category='" + category + '\'' +
+                ", rating=" + rating +
+                ", price=" + price +
+                ", maker='" + maker + '\'' +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
