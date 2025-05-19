@@ -5,4 +5,5 @@
     <string name="content_description_account">Acciones de usuario</string>
     <string name="category_icon_descriptor">Icono de la categoría</string>
     <string name="products_page_title">Productos</string>
+    <string name="product_icon_descriptor">Icono del producto</string>
 </resources>

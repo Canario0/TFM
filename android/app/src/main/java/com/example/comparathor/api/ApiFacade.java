@@ -4,8 +4,10 @@ import android.util.Log;
 
 import com.example.comparathor.BuildConfig;
 import com.example.comparathor.entities.CategoryPreview;
+import com.example.comparathor.entities.ProductSummary;
 import com.example.comparathor.retrofit.services.AuthService;
 import com.example.comparathor.retrofit.services.CategoriesService;
+import com.example.comparathor.retrofit.services.ProductsService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,10 +64,22 @@ public class ApiFacade {
             return result;
         } catch (IOException e) {
             Log.w(AuthService.class.getName(), e.getMessage());
-            return null;
+            return new ArrayList<>();
         }
-
     }
 
 
+    public List<ProductSummary> getAllProducts() {
+        ProductsService service = retrofit.create(ProductsService.class);
+        try {
+            List<ProductSummary> result = service.getAll().execute().body();
+            if (result == null) {
+                return new ArrayList<>();
+            }
+            return result;
+        } catch (IOException e) {
+            Log.w(AuthService.class.getName(), e.getMessage());
+            return new ArrayList<>();
+        }
+    }
 }
