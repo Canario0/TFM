@@ -3,6 +3,7 @@ package com.example.comparathor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,8 @@ import com.example.comparathor.entities.ProductSummary;
 import com.example.comparathor.utils.IntentConstants;
 import com.example.comparathor.viewModel.ProductSummaryViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +37,9 @@ public class ProductsActivity extends AppCompatActivity {
     private ProductSummaryViewModel.Callback refreshCallBack = null;
     private String category = null;
 
-    private Set<String> selectedProducts = new HashSet<>();
+    private final Set<String> selectedProducts = new HashSet<>();
+
+    private ExtendedFloatingActionButton compareFab = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,11 @@ public class ProductsActivity extends AppCompatActivity {
             @Override
             public void onSelected(ProductSummary product) {
                 onProductSelected(product);
+            }
+
+            @Override
+            public void onUnselected(ProductSummary product) {
+                onProductUnselected(product);
             }
         });
         RecyclerView.LayoutManager layoutManager =
@@ -91,14 +101,41 @@ public class ProductsActivity extends AppCompatActivity {
                 adapter.setProducts(products);
             }
         });
+
+        this.compareFab = this.findViewById(R.id.compare_fab);
+        this.compareFab.setOnClickListener(this::onProductCompare);
     }
 
     protected void handleReload() {
         this.viewModel.loadProducts(this.category, this.refreshCallBack);
     }
 
+    protected void updateFabState() {
+        int productSize = this.selectedProducts.size();
+        if (productSize > 0) {
+            String displayText = "Comparar " + productSize;
+            displayText += productSize > 1 ? " productos" : " producto";
+            this.compareFab.setText(displayText);
+            this.compareFab.setVisibility(View.VISIBLE);
+        } else {
+            this.compareFab.setVisibility(View.GONE);
+        }
+    }
+
+    public void onProductCompare(View v) {
+        // TODO: open compare activity
+        Log.i(this.getLocalClassName(), "Selected: " + this.selectedProducts);
+    }
+
     public void onProductSelected(ProductSummary product) {
         Log.i(this.getLocalClassName(), "Item: " + product);
         this.selectedProducts.add(product.getId());
+        this.updateFabState();
+    }
+
+    public void onProductUnselected(ProductSummary product) {
+        Log.i(this.getLocalClassName(), "Item: " + product);
+        this.selectedProducts.remove(product.getId());
+        this.updateFabState();
     }
 }

@@ -1,6 +1,5 @@
 package com.example.comparathor.adapters;
 
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +7,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,23 +56,35 @@ public class ProductSummaryAdapter extends RecyclerView.Adapter<ProductSummaryAd
 
         private final RatingBar ratingBar;
 
-        private final ImageButton imageButton;
+        private final ImageButton selectImageButton;
+        private final ImageButton unselectImageButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.iconView = (ImageView) itemView.findViewById(R.id.product_icon);
             this.nameTextView = (TextView) itemView.findViewById(R.id.product_name);
             this.ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
-            this.imageButton = (ImageButton) itemView.findViewById(R.id.select_button);
+            this.selectImageButton = (ImageButton) itemView.findViewById(R.id.select_button);
+            this.unselectImageButton = (ImageButton) itemView.findViewById(R.id.unselect_button);
         }
 
         public void bind(ProductSummary product, ProductListener listener) {
             this.iconView.setImageResource(product.getResourceIcon());
             this.nameTextView.setText(product.getName());
             this.ratingBar.setRating(product.getRating());
-            this.imageButton.setOnClickListener(new View.OnClickListener() {
+            this.selectImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    selectImageButton.setVisibility(View.GONE);
+                    unselectImageButton.setVisibility(View.VISIBLE);
+                    listener.onSelected(product);
+                }
+            });
+            this.unselectImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    unselectImageButton.setVisibility(View.GONE);
+                    selectImageButton.setVisibility(View.VISIBLE);
                     listener.onSelected(product);
                 }
             });
@@ -85,6 +95,8 @@ public class ProductSummaryAdapter extends RecyclerView.Adapter<ProductSummaryAd
     public interface ProductListener {
 
         void onSelected(ProductSummary product);
+
+        void onUnselected(ProductSummary product);
     }
 
 }
