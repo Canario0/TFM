@@ -85,7 +85,7 @@ public class ProductSummaryAdapter extends RecyclerView.Adapter<ProductSummaryAd
                 public void onClick(View v) {
                     unselectImageButton.setVisibility(View.GONE);
                     selectImageButton.setVisibility(View.VISIBLE);
-                    listener.onSelected(product);
+                    listener.onUnselected(product);
                 }
             });
         }

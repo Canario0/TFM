@@ -72,11 +72,11 @@ public class ProductSummary {
     }
 
     public Float getRating() {
-        return rating;
+        return rating / 2;
     }
 
     public void setRating(Float rating) {
-        this.rating = rating;
+        this.rating = rating * 2;
     }
 
     public Float getPrice() {

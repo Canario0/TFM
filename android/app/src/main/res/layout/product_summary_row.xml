@@ -59,7 +59,8 @@
                         android:id="@+id/product_name"
                         style="@style/ProductSummaryTitle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        />
 
 
                 </LinearLayout>
@@ -71,7 +72,6 @@
                     android:layout_marginTop="0dp"
                     android:isIndicator="true"
                     android:numStars="5"
-                    android:rating="0"
                     android:scaleX="0.5"
                     android:scaleY="0.5" />
 
