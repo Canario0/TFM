@@ -56,4 +56,15 @@ public class Comparison {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
+    @Override
+    public String toString() {
+        return "Comparison{" +
+                "id='" + id + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", products=" + (products != null ? products.size() + " items" : "null") +
+                '}';
+    }
 }

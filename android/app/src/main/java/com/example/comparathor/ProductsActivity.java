@@ -22,7 +22,6 @@ import com.example.comparathor.utils.IntentConstants;
 import com.example.comparathor.viewModel.ProductSummaryViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.HashSet;
 import java.util.List;
@@ -123,8 +122,10 @@ public class ProductsActivity extends AppCompatActivity {
     }
 
     public void onProductCompare(View v) {
-        // TODO: open compare activity
         Log.i(this.getLocalClassName(), "Selected: " + this.selectedProducts);
+        Intent intent = new Intent(this, ComparisonActivity.class);
+        intent.putExtra(IntentConstants.PRODUCT_IDS, this.selectedProducts.toArray(new String[0]));
+        startActivity(intent);
     }
 
     public void onProductSelected(ProductSummary product) {

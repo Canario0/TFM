@@ -33,15 +33,11 @@ public class ComparisonViewModel extends AndroidViewModel {
         return comparison;
     }
 
-    public interface Callback {
-        void onComplete(boolean success);
-    }
-
-    public void loadComparisonById(String id, Callback callback) {
+    public void loadComparisonById(String id) {
         throw new NotImplementedError("Comparison loading by id is under construction");
     }
 
-    public void createComparison(Callback callback, String... productIds) {
+    public void createComparison(String... productIds) {
         executorService.execute(
                 new Runnable() {
                     @Override
@@ -56,9 +52,6 @@ public class ComparisonViewModel extends AndroidViewModel {
                         remoteProducts.sort((p1, p2) -> p1.getName().compareTo(p2.getName()));
                         comparison.postValue(new Comparison(null, null, null, null, remoteProducts));
                         Log.i(ComparisonViewModel.class.getName(), "Response: " + remoteProducts);
-                        if (callback != null) {
-                            callback.onComplete(true);
-                        }
                     }
                 }
         );
