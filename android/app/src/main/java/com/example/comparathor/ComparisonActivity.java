@@ -16,6 +16,7 @@ import com.example.comparathor.entities.Comparison;
 import com.example.comparathor.entities.ProductSummary;
 import com.example.comparathor.utils.IntentConstants;
 import com.example.comparathor.viewModel.ComparisonViewModel;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +35,13 @@ public class ComparisonActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        MaterialToolbar toolbar = this.findViewById(R.id.topAppBar);
+        toolbar.setNavigationOnClickListener(
+                v -> {
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+        );
 
         Intent intent = getIntent();
         String[] ids = intent.getStringArrayExtra(IntentConstants.PRODUCT_IDS);

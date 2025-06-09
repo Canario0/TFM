@@ -1,6 +1,9 @@
 package com.example.comparathor.entities;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Comparison {
     private String id;
@@ -59,12 +62,38 @@ public class Comparison {
 
     @Override
     public String toString() {
-        return "Comparison{" +
-                "id='" + id + '\'' +
-                ", ownerId='" + ownerId + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", products=" + (products != null ? products.size() + " items" : "null") +
-                '}';
+        return "Comparison{" + "id='" + id + '\'' + ", ownerId='" + ownerId + '\'' + ", name='" + name + '\'' + ", description='" + description + '\'' + ", products=" + (products != null ? products.size() + " items" : "null") + '}';
+    }
+
+    public Map<String, Map<String, List<ProductMetadata>>> getGroupedSubcategories() {
+        Map<String, Map<String, List<ProductMetadata>>> groupedCategories = new HashMap<>();
+        for (Product product : this.products) {
+            for (ProductSubCategory subCategory : product.getSubCategories()) {
+                Map<String, List<ProductMetadata>> groupedMetadata = groupedCategories.computeIfAbsent(subCategory.getName(), (key) -> new HashMap<>());
+                subCategory.getMetadata().forEach((m) -> {
+                    List<ProductMetadata> metadataList = groupedMetadata.computeIfAbsent(m.getKey(), (key) -> new ArrayList<>());
+                    metadataList.add(new ProductMetadata(product.getId(), m.getValue()));
+                });
+            }
+        }
+        return groupedCategories;
+    }
+
+    static class ProductMetadata {
+        private String productId;
+        private String value;
+
+        public ProductMetadata(String productId, String value) {
+            this.productId = productId;
+            this.value = value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public void setProductId(String productId) {
+            this.productId = productId;
+        }
     }
 }
