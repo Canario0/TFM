@@ -5,7 +5,7 @@ import java.util.List;
 public class Product {
     private String id;
     private String name;
-    private String icon;
+    private Icons icon;
     private String category;
     private double rating;
     private String maker;
@@ -15,7 +15,7 @@ public class Product {
     private List<ProductSubCategory> subCategories;
     private String description;
 
-    public Product(String id, String name, String icon, String category,
+    public Product(String id, String name, Icons icon, String category,
                    double rating, String maker, String brand, String model,
                    double price,
                    List<ProductSubCategory> subCategories, String description) {
@@ -48,11 +48,15 @@ public class Product {
         this.name = name;
     }
 
-    public String getIcon() {
+    public Icons getIcon() {
         return icon;
     }
 
-    public void setIcon(String icon) {
+    public int getResourceIcon() {
+        return this.icon.getDrawableResource();
+    }
+
+    public void setIcon(Icons icon) {
         this.icon = icon;
     }
 

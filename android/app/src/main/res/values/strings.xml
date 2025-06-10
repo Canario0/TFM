@@ -10,4 +10,5 @@
     <string name="select_button_descriptor">Selecionar producto para comparar</string>
     <string name="compare_fab_button_description">Boton crear comparativa flotante</string>
     <string name="unselect_button_descriptor">Deseleccionar producto para comparar</string>
+    <string name="icono_categoria">Icono</string>
 </resources>

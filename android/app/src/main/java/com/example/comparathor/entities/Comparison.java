@@ -12,12 +12,15 @@ public class Comparison {
     private String description;
     private List<Product> products;
 
+    private Map<String, Map<String, List<ProductMetadata>>> groupedCategories;
+
     public Comparison(String id, String ownerId, String name, String description, List<Product> products) {
         this.id = id;
         this.ownerId = ownerId;
         this.name = name;
         this.description = description;
         this.products = products;
+        this.groupedCategories = this.getGroupedSubcategories();
     }
 
     public String getId() {
@@ -60,12 +63,25 @@ public class Comparison {
         this.products = products;
     }
 
+    public String getProductMetadata(String productId, String subcategoryName, String metadataKey) {
+        Map<String, List<ProductMetadata>> metadataMap = this.groupedCategories.get(subcategoryName);
+        List<ProductMetadata> metadataList = metadataMap.get(metadataKey);
+        if (metadataList == null || metadataList.size() == 0) {
+            return "desconocido";
+        }
+        return metadataList.stream()
+                .filter((pm) -> pm.getProductId().equals(productId))
+                .map(ProductMetadata::getValue)
+                .findFirst()
+                .orElse("desconocido");
+    }
+
     @Override
     public String toString() {
         return "Comparison{" + "id='" + id + '\'' + ", ownerId='" + ownerId + '\'' + ", name='" + name + '\'' + ", description='" + description + '\'' + ", products=" + (products != null ? products.size() + " items" : "null") + '}';
     }
 
-    public Map<String, Map<String, List<ProductMetadata>>> getGroupedSubcategories() {
+    private Map<String, Map<String, List<ProductMetadata>>> getGroupedSubcategories() {
         Map<String, Map<String, List<ProductMetadata>>> groupedCategories = new HashMap<>();
         for (Product product : this.products) {
             for (ProductSubCategory subCategory : product.getSubCategories()) {
@@ -88,12 +104,12 @@ public class Comparison {
             this.value = value;
         }
 
-        public void setValue(String value) {
-            this.value = value;
+        public String getProductId() {
+            return productId;
         }
 
-        public void setProductId(String productId) {
-            this.productId = productId;
+        public String getValue() {
+            return value;
         }
     }
 }
