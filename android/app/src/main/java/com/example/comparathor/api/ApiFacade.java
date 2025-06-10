@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.comparathor.BuildConfig;
 import com.example.comparathor.entities.CategoryPreview;
+import com.example.comparathor.entities.Product;
 import com.example.comparathor.entities.ProductSummary;
 import com.example.comparathor.retrofit.services.AuthService;
 import com.example.comparathor.retrofit.services.CategoriesService;
@@ -80,6 +81,16 @@ public class ApiFacade {
         } catch (IOException e) {
             Log.w(AuthService.class.getName(), e.getMessage());
             return new ArrayList<>();
+        }
+    }
+
+    public Product getProductById(String id) {
+        ProductsService service = retrofit.create(ProductsService.class);
+        try {
+            return service.getById(id).execute().body();
+        } catch (IOException e) {
+            Log.w(AuthService.class.getName(), e.getMessage());
+            return null;
         }
     }
 }
